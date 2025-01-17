@@ -5,6 +5,18 @@ VisualStudioVersion = 17.12.35521.163 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrismWear", "PrismWear\PrismWear.csproj", "{78E9B338-370B-4A50-8278-F98811B38DE6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{672243C1-DA5B-47A9-89C0-4EA292B2ECC2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{F8772D79-302B-416C-A137-38A7237E5B47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrismWear.Data.Data", "PrismWear.Data.Data\PrismWear.Data.Data.csproj", "{C452EDBF-2E08-4037-A5E0-098500FE5CA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrismWear.Data.Common", "PrismWear.Data.Common\PrismWear.Data.Common.csproj", "{79BBF3EA-1658-45AA-9A1A-13CD2018A4D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrismWear.Data.Models", "PrismWear.Data.Models\PrismWear.Data.Models.csproj", "{88C9ED72-DA31-489F-BBD3-1E3902DF02D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrismWear.Services.Data", "PrismWear.Services.Data\PrismWear.Services.Data.csproj", "{BA15BDDD-A855-4CE6-9776-D3F8FE635915}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,8 +27,30 @@ Global
 		{78E9B338-370B-4A50-8278-F98811B38DE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78E9B338-370B-4A50-8278-F98811B38DE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78E9B338-370B-4A50-8278-F98811B38DE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C452EDBF-2E08-4037-A5E0-098500FE5CA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C452EDBF-2E08-4037-A5E0-098500FE5CA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C452EDBF-2E08-4037-A5E0-098500FE5CA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C452EDBF-2E08-4037-A5E0-098500FE5CA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79BBF3EA-1658-45AA-9A1A-13CD2018A4D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79BBF3EA-1658-45AA-9A1A-13CD2018A4D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79BBF3EA-1658-45AA-9A1A-13CD2018A4D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79BBF3EA-1658-45AA-9A1A-13CD2018A4D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88C9ED72-DA31-489F-BBD3-1E3902DF02D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88C9ED72-DA31-489F-BBD3-1E3902DF02D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88C9ED72-DA31-489F-BBD3-1E3902DF02D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88C9ED72-DA31-489F-BBD3-1E3902DF02D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA15BDDD-A855-4CE6-9776-D3F8FE635915}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA15BDDD-A855-4CE6-9776-D3F8FE635915}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA15BDDD-A855-4CE6-9776-D3F8FE635915}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA15BDDD-A855-4CE6-9776-D3F8FE635915}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C452EDBF-2E08-4037-A5E0-098500FE5CA0} = {672243C1-DA5B-47A9-89C0-4EA292B2ECC2}
+		{79BBF3EA-1658-45AA-9A1A-13CD2018A4D2} = {672243C1-DA5B-47A9-89C0-4EA292B2ECC2}
+		{88C9ED72-DA31-489F-BBD3-1E3902DF02D0} = {672243C1-DA5B-47A9-89C0-4EA292B2ECC2}
+		{BA15BDDD-A855-4CE6-9776-D3F8FE635915} = {F8772D79-302B-416C-A137-38A7237E5B47}
 	EndGlobalSection
 EndGlobal
