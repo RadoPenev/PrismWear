@@ -2,6 +2,7 @@
 using PrismWear.Data.Common.Models;
 using PrismWear.Data.Common.Repositories;
 using PrismWear.Data.Repositories;
+using PrismWear.Data;
 
 namespace PrismWear.Data.Data.Repositories
 {
