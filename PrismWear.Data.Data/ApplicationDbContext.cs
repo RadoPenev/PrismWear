@@ -37,6 +37,12 @@ namespace PrismWear.Data
                 }
             }
 
+            builder.Entity<Category>().HasData(
+                new Category { Id=1,Name = "Men" },
+                new Category { Id=2,Name = "Women" }
+                );
+
+
             // Fluent API configurations
             builder.Entity<Product>()
                    .HasOne(p => p.Category)
