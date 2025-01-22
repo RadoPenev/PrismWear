@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PrismWear.Data;
+using PrismWear.Data.Common.Repositories;
+using PrismWear.Data.Data.Repositories;
+using PrismWear.Data.Repositories;
+using PrismWear.Services.Data;
 
 namespace PrismWear
 {
@@ -16,9 +20,15 @@ namespace PrismWear
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+
+           builder.Services.AddTransient<ICategoriesService,CategoriesService>();
+            builder.Services.AddTransient<IProductsService, ProductsService>();
 
             var app = builder.Build();
 
@@ -37,6 +47,7 @@ namespace PrismWear
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapStaticAssets();
@@ -46,7 +57,7 @@ namespace PrismWear
                 .WithStaticAssets();
             app.MapRazorPages()
                .WithStaticAssets();
-
+            app.MapRazorPages();
             app.Run();
         }
     }
