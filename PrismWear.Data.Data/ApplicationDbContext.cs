@@ -43,12 +43,18 @@ namespace PrismWear.Data
                 );
 
 
-            // Fluent API configurations
-            builder.Entity<Product>()
-                   .HasOne(p => p.Category)
-                   .WithMany(c => c.Products)
-                   .HasForeignKey(p => p.CategoryId)
-                   .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Product>(entity =>
+            {
+                entity.HasOne(p => p.Category)
+                      .WithMany(c => c.Products)
+                      .HasForeignKey(p => p.CategoryId)
+                      .OnDelete(DeleteBehavior.Restrict);
+                
+                entity.HasOne(p => p.User)
+                      .WithMany()
+                      .HasForeignKey(p => p.AddedByUser)
+                      .OnDelete(DeleteBehavior.Restrict); 
+            });
 
             builder.Entity<CartItem>()
                    .HasOne(ci => ci.Cart)

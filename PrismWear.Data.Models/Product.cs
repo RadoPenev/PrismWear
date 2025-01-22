@@ -1,4 +1,5 @@
-﻿using PrismWear.Data.Common.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using PrismWear.Data.Common.Models;
 
 namespace PrismWear.Data.Models
 {
@@ -21,6 +22,10 @@ namespace PrismWear.Data.Models
         public string ImagePath { get; set; }
 
         public string Gender { get; set; }
+
+        public string AddedByUser { get; set; }
+
+        public IdentityUser User { get; set; }
 
         public int CategoryId { get; set; }
 
