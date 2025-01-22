@@ -14,12 +14,18 @@ namespace PrismWear.Data
         }
 
         public DbSet<Category> Categories { get; set; }
+
         public DbSet<Product> Products { get; set; }
+
         public DbSet<Cart> Carts { get; set; }
+
         public DbSet<CartItem> CartItems { get; set; }
+
         public DbSet<Order> Orders { get; set; }
+
         public DbSet<OrderItem> OrderItems { get; set; }
 
+        public DbSet<Image> Images { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -69,7 +75,6 @@ namespace PrismWear.Data
                    .OnDelete(DeleteBehavior.Restrict);
         }
 
-        // Static helper method for setting global query filters
         private static void SetGlobalQueryFilter<T>(ModelBuilder builder) where T : class
         {
             builder.Entity<T>().HasQueryFilter(e => !EF.Property<bool>(e, "IsDeleted"));
