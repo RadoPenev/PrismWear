@@ -1,6 +1,7 @@
 ﻿using PrismWear.Data.Common.Repositories;
 using PrismWear.Data.Models;
 using PrismWear.Web.ViewModels;
+using PrismWear.Web.ViewModels.Products;
 using System.Net.Http.Headers;
 
 namespace PrismWear.Services.Data
@@ -18,6 +19,7 @@ namespace PrismWear.Services.Data
         {
             var product = new Product
             {
+                Description = input.Description,
                 CategoryId = input.CategoryId,
                 AddedByUser = userId,
                 Name = input.Name,
@@ -53,6 +55,29 @@ namespace PrismWear.Services.Data
 
             await this.productsRepository.AddAsync(product);
             await this.productsRepository.SaveChangesAsync();
+        }
+
+        public IEnumerable<ProductInListViewModel> GetAll(int page, int itemsPerPage = 12)
+        {
+            return this.productsRepository.AllAsNoTracking()
+                .OrderByDescending(x=>x.Id)
+                .Skip((page-1)*itemsPerPage)
+                .Take(itemsPerPage)
+                .Select(product=> new ProductInListViewModel
+                {
+                    Id=product.Id,
+                    Name=product.Name,
+                    CategoryId=product.CategoryId,
+                    Images = product.Images,
+                    CategoryName=product.Category.Name,
+                    
+                })
+                .ToList();
+        }
+
+        public int GetCount()
+        {
+            return this.productsRepository.All().Count();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿
 using PrismWear.Web.ViewModels;
+using PrismWear.Web.ViewModels.Products;
 
 namespace PrismWear.Services.Data
 {
@@ -7,5 +8,8 @@ namespace PrismWear.Services.Data
     {
         Task CreateAsync(CreateProductInputModel input, string userId, string imagePath);
 
+        IEnumerable<ProductInListViewModel> GetAll(int page, int itemsPerPage = 12);
+
+        int GetCount();
     }
 }

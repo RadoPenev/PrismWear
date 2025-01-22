@@ -1,0 +1,64 @@
+﻿@using PrismWear.Web.ViewModels.Products
+@model ProductListViewModel
+
+@{
+    this.ViewData["Title"] = "All products";
+}
+
+<h1>@this.ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="media col-md-4">
+        @foreach (var product in Model.Products)
+        {
+            <img src="@($"/images/products/{product.Images.FirstOrDefault()?.Id}.{product.Images.FirstOrDefault()?.Extension}")" class="mr-3" width="100" />
+            <div class="media-body">
+                <h5 class="mt-0"><a asp-action="ById" asp-route-id="@product.Id">@product.Name</a></h5>
+                @product.CategoryName
+            </div>
+        }
+    </div>
+</div>
+<hr />
+<nav aria-label="...">
+    <ul class="pagination">
+        <li class="page-item @if(!Model.HasPreviousPage){
+        <text>disabled</text>
+}">
+            <a class="page-link" asp-action="All" asp-route-id="@Model.PreviousPageNumber">Previous</a>
+        </li>
+        @if (Model.PageNumber < 4)
+        {
+            for (int i = 1; i < Model.PageNumber; i++)
+            {
+                <li class="page-item"><a class="page-link" asp-action="All" asp-route-id="@i">@i</a></li>
+            }
+        }
+        else
+        {
+            for (int i = Model.PageNumber - 3; i < Model.PageNumber; i++)
+            {
+                <li class="page-item"><a class="page-link" asp-action="All" asp-route-id="@i">@i</a></li>
+            }
+        }
+
+        <li class="page-item active">
+            <span class="page-link">
+                @Model.PageNumber
+            </span>
+        </li>
+
+        @for (int i = Model.PageNumber + 1; i < Model.PageNumber + 4; i++)
+        {
+            if (i <= Model.PagesCount)
+            {
+                <li class="page-item"><a class="page-link" asp-action="All" asp-route-id="@i">@i</a></li>
+            }
+        }
+        <li class="page-item @if(Model.HasNextPage){
+        <text>disabled</text>
+}">
+            <a class="page-link" asp-action="All" asp-route-id="@Model.NextPageNumber">Next</a>
+        </li>
+    </ul>
+</nav>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PrismWear.Services.Data;
 using PrismWear.Web.ViewModels;
+using PrismWear.Web.ViewModels.Products;
 
 namespace PrismWear.Controllers
 {
@@ -55,6 +56,27 @@ namespace PrismWear.Controllers
 
             return this.Redirect("/");
         }
+
+        public IActionResult All(int pageNumber = 1)
+        {
+            const int ItemsPerPage = 12;
+
+            var products = this.productsService.GetAll(pageNumber, ItemsPerPage);
+            var totalProductsCount = this.productsService.GetCount();
+
+            var viewModel = new ProductListViewModel
+            {
+                Products = products,
+                PageNumber = pageNumber,
+                ProductsCount = totalProductsCount,
+                ItemsPerPage = ItemsPerPage
+            };
+
+            return View(viewModel);
+        }
+
+
     }
-    
 }
+    
+
