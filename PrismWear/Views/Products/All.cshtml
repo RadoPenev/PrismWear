@@ -52,13 +52,15 @@
         {
             if (i <= Model.PagesCount)
             {
-                <li class="page-item"><a class="page-link" asp-action="All" asp-route-id="@i">@i</a></li>
+                <li class="page-item">
+                    <a class="page-link" asp-action="All" asp-route-id="@i">@i</a>
+                </li>
             }
         }
-        <li class="page-item @if(Model.HasNextPage){
-        <text>disabled</text>
-}">
-            <a class="page-link" asp-action="All" asp-route-id="@Model.NextPageNumber">Next</a>
+        <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+            <a class="page-link" asp-action="All" asp-route-id="@Model.NextPageNumber"
+               tabindex="@(Model.HasNextPage ? "0" : "-1")">Next</a>
         </li>
+
     </ul>
 </nav>
