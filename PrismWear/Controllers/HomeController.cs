@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using PrismWear.Models;
+using PrismWear.Web.ViewModels;
 
 namespace PrismWear.Controllers
 {
