@@ -12,7 +12,7 @@ namespace PrismWear.Data.Models
 
         public string UserId { get; set; }
 
-        public virtual IdentityUser User { get; set; }
+        public  IdentityUser User { get; set; }
 
         public decimal TotalAmmount { get; set; }
 

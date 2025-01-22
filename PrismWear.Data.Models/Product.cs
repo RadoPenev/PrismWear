@@ -9,6 +9,7 @@ namespace PrismWear.Data.Models
         {
             this.CartItems = new HashSet<CartItem>();
             this.OrderItems = new HashSet<OrderItem>();
+            this.Images=new HashSet<Image>();
         }
 
         public string Name { get; set; }
@@ -19,10 +20,6 @@ namespace PrismWear.Data.Models
 
         public string Size { get; set; }
 
-        public string ImagePath { get; set; }
-
-        public string Gender { get; set; }
-
         public string AddedByUser { get; set; }
 
         public IdentityUser User { get; set; }
@@ -30,6 +27,8 @@ namespace PrismWear.Data.Models
         public int CategoryId { get; set; }
 
         public Category Category { get; set; }
+
+        public virtual ICollection<Image> Images { get; set; }  
 
         public virtual ICollection<CartItem> CartItems { get; set; }
 
