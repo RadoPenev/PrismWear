@@ -57,6 +57,13 @@ namespace PrismWear.Services.Data
             await this.productsRepository.SaveChangesAsync();
         }
 
+        public async Task DeleteAsync(int id)
+        {
+           var product=this.productsRepository.All().FirstOrDefault(x=>x.Id==id);
+           this.productsRepository.Delete(product);
+            await this.productsRepository.SaveChangesAsync();
+        }
+
         public IEnumerable<ProductInListViewModel> GetAll(int page, int itemsPerPage = 12)
         {
             return this.productsRepository.AllAsNoTracking()
@@ -73,6 +80,26 @@ namespace PrismWear.Services.Data
                     
                 })
                 .ToList();
+        }
+
+        public SingleProductViewModel GetById(int id)
+        {
+#pragma warning disable CS8603 // Possible null reference return.
+            return this.productsRepository
+                .AllAsNoTracking()
+                .Where(x => x.Id == id)
+                .Select(x => new SingleProductViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description=x.Description,
+                    Size=x.Size,
+                    ImageUrl = $"/images/products/{x.Images.FirstOrDefault().Id}.{x.Images.FirstOrDefault().Extension}",
+                    Price=x.Price,
+                    CategoryName=x.Category.Name,
+                })
+                .FirstOrDefault();
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         public int GetCount()

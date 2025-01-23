@@ -11,5 +11,9 @@ namespace PrismWear.Services.Data
         IEnumerable<ProductInListViewModel> GetAll(int page, int itemsPerPage = 12);
 
         int GetCount();
+
+        SingleProductViewModel GetById(int id);
+
+        Task DeleteAsync(int id);
     }
 }

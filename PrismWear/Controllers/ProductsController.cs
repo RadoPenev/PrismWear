@@ -75,7 +75,12 @@ namespace PrismWear.Controllers
             return View(viewModel);
         }
 
+        public IActionResult ById(int id)
+        {
+            var product = this.productsService.GetById(id);
 
+            return this.View(product);
+        }
     }
 }
     
