@@ -35,6 +35,7 @@ namespace PrismWear.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(CreateProductInputModel input)
         {
             if (this.ModelState.IsValid)
@@ -56,6 +57,17 @@ namespace PrismWear.Controllers
 
             return this.Redirect("/");
         }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await this.productsService.DeleteAsync(id);
+            return this.RedirectToAction("All");
+        }
+
+
 
         public IActionResult All(int pageNumber = 1)
         {
@@ -81,6 +93,38 @@ namespace PrismWear.Controllers
 
             return this.View(product);
         }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var product = this.productsService.GetById(id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new EditProductInputModel();
+         
+
+            viewModel.CategoriesItems = this.categoriesService.GetAllAsKeyValuePairs();
+            return this.View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id,EditProductInputModel input)
+        {
+            if (this.ModelState.IsValid)
+            {
+                input.Id = id;
+                input.CategoriesItems = this.categoriesService.GetAllAsKeyValuePairs();
+                return this.View(input);
+            }
+
+            await this.productsService.EditAsync(id, input);
+            return this.RedirectToAction("All");
+        }
+
     }
 }
     

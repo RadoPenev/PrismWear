@@ -1,0 +1,102 @@
+﻿@model PrismWear.Web.ViewModels.Categories.EditCategoryInputModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Edit Category</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .edit-category-container {
+            max-width: 500px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            padding: 30px;
+        }
+
+            .edit-category-container h1 {
+                text-align: center;
+                margin-top: 0;
+                margin-bottom: 20px;
+                font-size: 1.6em;
+            }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+
+            .form-group input[type="text"] {
+                width: 100%;
+                padding: 8px 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 1em;
+            }
+
+        .text-danger {
+            color: red;
+            font-size: 0.9em;
+        }
+
+        .submit-btn {
+            display: inline-block;
+            padding: 10px 16px;
+            background-color: #333;
+            color: #ffffff;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            .submit-btn:hover {
+                background-color: #444;
+            }
+
+        .cancel-link {
+            margin-left: 10px;
+            text-decoration: none;
+            color: #666;
+            font-weight: bold;
+        }
+
+            .cancel-link:hover {
+                text-decoration: underline;
+            }
+    </style>
+</head>
+<body>
+    <div class="edit-category-container">
+        <h1>Edit Category</h1>
+        <form asp-action="Edit" asp-controller="Categories" asp-route-id="@Model.Id" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="submit-btn">Save Changes</button>
+            <a asp-action="All" asp-controller="Categories" class="cancel-link">Cancel</a>
+        </form>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

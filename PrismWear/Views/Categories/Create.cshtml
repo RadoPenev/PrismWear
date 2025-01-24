@@ -1,0 +1,90 @@
+﻿@model PrismWear.Web.ViewModels.Categories.CreateCategoryInputModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Add New Category</title>
+    <style>
+        /* Minimal demonstration styling – consider moving to an external .css file */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .create-category-container {
+            max-width: 500px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            padding: 30px;
+        }
+
+            .create-category-container h1 {
+                margin-top: 0;
+                margin-bottom: 20px;
+                text-align: center;
+                font-size: 1.6em;
+            }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+
+            .form-group input[type="text"] {
+                width: 100%;
+                padding: 8px 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 1em;
+            }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 10px 16px;
+            background-color: #333;
+            color: #ffffff;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            .submit-btn:hover {
+                background-color: #444;
+            }
+
+        .text-danger {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="create-category-container">
+        <h1>Add New Category</h1>
+        <form asp-action="Create" asp-controller="Categories" method="post">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="submit-btn">Create Category</button>
+        </form>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PrismWear.Common\PrismWear.Common.csproj" />
     <ProjectReference Include="..\PrismWear.Data.Common\PrismWear.Data.Common.csproj" />
     <ProjectReference Include="..\PrismWear.Data.Data\PrismWear.Data.Data.csproj" />
     <ProjectReference Include="..\PrismWear.Data.Models\PrismWear.Data.Models.csproj" />

@@ -8,11 +8,11 @@ namespace PrismWear.Services.Data
 {
     public class ProductsService : IProductsService
     {
-        private readonly IDeletableEntityRepository<Product> productsRepository;
+        private readonly IDeletableEntityRepository<Product> productsService;
 
-        public ProductsService(IDeletableEntityRepository<Product> productsRepository)
+        public ProductsService(IDeletableEntityRepository<Product> productsService)
         {
-            this.productsRepository = productsRepository;
+            this.productsService = productsService;
         }
 
         public async Task CreateAsync(CreateProductInputModel input, string userId, string imagePath)
@@ -53,20 +53,37 @@ namespace PrismWear.Services.Data
                 }
             }
 
-            await this.productsRepository.AddAsync(product);
-            await this.productsRepository.SaveChangesAsync();
+            await this.productsService.AddAsync(product);
+            await this.productsService.SaveChangesAsync();
         }
 
+        
         public async Task DeleteAsync(int id)
         {
-           var product=this.productsRepository.All().FirstOrDefault(x=>x.Id==id);
-           this.productsRepository.Delete(product);
-            await this.productsRepository.SaveChangesAsync();
+           var product=this.productsService.All().FirstOrDefault(x=>x.Id==id);
+           this.productsService.Delete(product);
+            await this.productsService.SaveChangesAsync();
+        }
+
+        public async Task EditAsync(int id, EditProductInputModel viewModel)
+        {
+            var product = this.productsService
+                .All()
+                .FirstOrDefault(x => x.Id == id);           
+
+            product.Id = id;
+            product.Name = viewModel.Name;
+            product.Description = viewModel.Description;
+            product.Size = viewModel.Size;
+            product.Price = viewModel.Price;
+            product.CategoryId = viewModel.CategoryId;
+
+            await this.productsService.SaveChangesAsync();
         }
 
         public IEnumerable<ProductInListViewModel> GetAll(int page, int itemsPerPage = 12)
         {
-            return this.productsRepository.AllAsNoTracking()
+            return this.productsService.AllAsNoTracking()
                 .OrderByDescending(x=>x.Id)
                 .Skip((page-1)*itemsPerPage)
                 .Take(itemsPerPage)
@@ -84,27 +101,29 @@ namespace PrismWear.Services.Data
 
         public SingleProductViewModel GetById(int id)
         {
-#pragma warning disable CS8603 // Possible null reference return.
-            return this.productsRepository
+            var result = this.productsService
                 .AllAsNoTracking()
                 .Where(x => x.Id == id)
                 .Select(x => new SingleProductViewModel
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    Description=x.Description,
-                    Size=x.Size,
+                    Description = x.Description,
+                    Size = x.Size,
                     ImageUrl = $"/images/products/{x.Images.FirstOrDefault().Id}.{x.Images.FirstOrDefault().Extension}",
-                    Price=x.Price,
-                    CategoryName=x.Category.Name,
+                    Price = x.Price,
+                    CategoryName = x.Category.Name,
                 })
                 .FirstOrDefault();
-#pragma warning restore CS8603 // Possible null reference return.
+
+            if (result == null) throw new NullReferenceException("No product");
+
+            return result;
         }
 
         public int GetCount()
         {
-            return this.productsRepository.All().Count();
+            return this.productsService.All().Count();
         }
     }
 }

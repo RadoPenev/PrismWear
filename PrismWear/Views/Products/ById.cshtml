@@ -1,4 +1,5 @@
-﻿@using PrismWear.Web.ViewModels.Products
+﻿@using PrismWear.Common
+@using PrismWear.Web.ViewModels.Products
 @model SingleProductViewModel
 
 <!DOCTYPE html>
@@ -137,6 +138,16 @@
                     <button type="submit">Добави в кошницата</button>
                 </div>
             </form>
+
+           
+                <span class="single-meta">
+                    <a asp-controller="Products" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit</a>
+                </span>
+            <form asp-controller="Products" asp-action="Delete" asp-route-id="@Model.Id" method="post"
+                  onsubmit="return confirm('Are you sure you want to delete this item?');">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+           
         </div>
     </div>
 </body>

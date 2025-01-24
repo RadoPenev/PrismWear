@@ -14,6 +14,9 @@ namespace PrismWear.Services.Data
 
         SingleProductViewModel GetById(int id);
 
+
         Task DeleteAsync(int id);
+
+        Task EditAsync(int id, EditProductInputModel viewModel);
     }
 }
