@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PrismWear.Services.Data;
-using PrismWear.Web.ViewModels;
 using PrismWear.Web.ViewModels.Categories;
-using PrismWear.Web.ViewModels.Products;
 
 namespace PrismWear.Controllers
 {

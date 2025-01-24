@@ -1,5 +1,4 @@
-﻿
-using PrismWear.Web.ViewModels;
+﻿using PrismWear.Web.ViewModels;
 using PrismWear.Web.ViewModels.Products;
 
 namespace PrismWear.Services.Data

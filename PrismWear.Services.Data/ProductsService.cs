@@ -2,7 +2,6 @@
 using PrismWear.Data.Models;
 using PrismWear.Web.ViewModels;
 using PrismWear.Web.ViewModels.Products;
-using System.Net.Http.Headers;
 
 namespace PrismWear.Services.Data
 {

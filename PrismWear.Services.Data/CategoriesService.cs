@@ -1,9 +1,6 @@
-﻿
-using PrismWear.Data.Common.Models;
-using PrismWear.Data.Common.Repositories;
+﻿using PrismWear.Data.Common.Repositories;
 using PrismWear.Data.Models;
 using PrismWear.Web.ViewModels.Categories;
-using PrismWear.Web.ViewModels.Products;
 
 namespace PrismWear.Services.Data
 {

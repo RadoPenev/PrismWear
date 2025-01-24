@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using PrismWear.Data.Models;
+﻿using PrismWear.Data.Models;
 
 namespace PrismWear.Web.ViewModels.Products
 {

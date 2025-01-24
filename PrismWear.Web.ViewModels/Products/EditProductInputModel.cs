@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PrismWear.Web.ViewModels.Products
+﻿namespace PrismWear.Web.ViewModels.Products
 {
     public class EditProductInputModel : SingleProductViewModel
     {
