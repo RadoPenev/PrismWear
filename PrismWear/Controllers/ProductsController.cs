@@ -38,7 +38,8 @@ namespace PrismWear.Controllers
         [Authorize]
         public async Task<IActionResult> Create(CreateProductInputModel input)
         {
-            if (this.ModelState.IsValid)
+            ModelState.Remove(nameof(CreateProductInputModel.CategoriesItems));
+            if (!this.ModelState.IsValid)
             {
                 input.CategoriesItems = this.categoriesService.GetAllAsKeyValuePairs();
                 return this.View(input); 
@@ -97,24 +98,22 @@ namespace PrismWear.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var product = this.productsService.GetById(id);
-
-            if (product == null)
+            var viewModel = this.productsService.GetByIdEdit(id);
+            if (viewModel == null)
             {
                 return NotFound();
             }
 
-            var viewModel = new EditProductInputModel();
-         
-
             viewModel.CategoriesItems = this.categoriesService.GetAllAsKeyValuePairs();
-            return this.View(viewModel);
+
+            return View(viewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(int id,EditProductInputModel input)
         {
-            if (this.ModelState.IsValid)
+            ModelState.Remove(nameof(EditProductInputModel.CategoriesItems));
+            if (!this.ModelState.IsValid)
             {
                 input.Id = id;
                 input.CategoriesItems = this.categoriesService.GetAllAsKeyValuePairs();

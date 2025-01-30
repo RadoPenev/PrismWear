@@ -85,7 +85,7 @@
     <div class="edit-container">
         <h1>Edit Product</h1>
 
-        <form method="post">
+        <form asp-action="Edit" asp-controller="Products" asp-route-id="@Model.Id" method="post">
             <input type="hidden" asp-for="Id" />
 
             <div class="form-group">
@@ -102,7 +102,7 @@
 
             <div class="form-group mb-3">
             <label asp-for="Size" class="form-label fw-bold"></label>
-            <select name="Size" class="form-select">
+            <select asp-for="Size" class="form-select">
                 <option value="">Select size</option>
                 <option value="XS">XS</option>
                 <option value="S">S</option>

@@ -5,7 +5,6 @@ namespace PrismWear.Data.Models
 {
     public class Cart : BaseDeletableModel<int>
     {
-
         public string UserId { get; set; }
 
         public virtual IdentityUser User { get; set; }

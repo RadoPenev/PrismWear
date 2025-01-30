@@ -13,6 +13,7 @@ namespace PrismWear.Services.Data
 
         SingleProductViewModel GetById(int id);
 
+        EditProductInputModel GetByIdEdit(int id);
 
         Task DeleteAsync(int id);
 

@@ -1,39 +1,49 @@
-﻿@using PrismWear.Web.ViewModels
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@using PrismWear.Web.ViewModels
+
 @model CreateProductInputModel
+
 @{
     ViewData["Title"] = "Add New Product";
-    var categoriesItems = Model.CategoriesItems.Select(x => new SelectListItem(x.Value, x.Key));
+
+    var categoriesItems = Model.CategoriesItems.Select(x =>
+        new SelectListItem(x.Value, x.Key)).ToList();
 }
 
-<h2 class="text-center mt-4">Create Product</h2>
+<h2 class="text-center mt-4">@ViewData["Title"]</h2>
 
 <div class="container mt-4">
+    <!-- Shows any global errors (e.g. exception messages) or field-specific errors if you prefer -->
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
     <form method="post" enctype="multipart/form-data" class="border p-4 rounded shadow-sm bg-light">
+        @Html.AntiForgeryToken()
+
         <!-- Product Name -->
-        <div class="form-group mb-3">
+        <div class="mb-3">
             <label asp-for="Name" class="form-label fw-bold"></label>
             <input asp-for="Name" class="form-control" placeholder="Enter product name" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
         <!-- Description -->
-        <div class="form-group mb-3">
+        <div class="mb-3">
             <label asp-for="Description" class="form-label fw-bold"></label>
             <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter product description"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
 
         <!-- Price -->
-        <div class="form-group mb-3">
+        <div class="mb-3">
             <label asp-for="Price" class="form-label fw-bold"></label>
             <input asp-for="Price" type="number" step="0.01" class="form-control" placeholder="Enter product price" />
             <span asp-validation-for="Price" class="text-danger"></span>
         </div>
 
         <!-- Size -->
-        <div class="form-group mb-3">
+        <div class="mb-3">
             <label asp-for="Size" class="form-label fw-bold"></label>
-            <select name="Size" class="form-select">
+            <select asp-for="Size" class="form-select">
                 <option value="">Select size</option>
                 <option value="XS">XS</option>
                 <option value="S">S</option>
@@ -45,17 +55,16 @@
         </div>
 
         <!-- Upload Images -->
-        <div class="form-group mb-3">
-            <label asp-for="Images" class="form-label fw-bold">Upload Images</label>
-            <input asp-for="Images" type="file" multiple class="form-control" />
+        <div class="mb-3">
+            <label asp-for="Images" class="form-label fw-bold"></label>
+            <input asp-for="Images" type="file" multiple class="form-control"/>
             <span asp-validation-for="Images" class="text-danger"></span>
         </div>
 
         <!-- Category -->
-        <div class="form-group mb-3">
+        <div class="mb-3">
             <label asp-for="CategoryId" class="form-label fw-bold"></label>
-            <select asp-for="CategoryId" class="form-select" asp-items="categoriesItems">
-                <option value="">-- Select Category --</option>
+            <select asp-for="CategoryId" asp-items="categoriesItems" class="form-control" >
             </select>
             <span asp-validation-for="CategoryId" class="text-danger"></span>
         </div>
@@ -66,3 +75,8 @@
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <!-- Optional: Include client-side validation scripts if using jQuery validation -->
+    <partial name="_ValidationScriptsPartial" />
+}

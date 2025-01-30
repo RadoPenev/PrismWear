@@ -120,6 +120,26 @@ namespace PrismWear.Services.Data
             return result;
         }
 
+        public EditProductInputModel GetByIdEdit(int id)
+        {
+            var result = this.productsService
+                .AllAsNoTracking()
+                .Where(x => x.Id == id)
+                .Select(x => new EditProductInputModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    Size = x.Size,
+                    Price = x.Price,
+                })
+                .FirstOrDefault();
+
+            if (result == null) throw new NullReferenceException("No product");
+
+            return result;
+        }
+
         public int GetCount()
         {
             return this.productsService.All().Count();
