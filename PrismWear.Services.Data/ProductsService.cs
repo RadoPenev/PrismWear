@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using PrismWear.Data.Common.Repositories;
 using PrismWear.Data.Models;
 using PrismWear.Web.ViewModels;
@@ -9,11 +10,11 @@ namespace PrismWear.Services.Data
 {
     public class ProductsService : IProductsService
     {
-        private readonly IDeletableEntityRepository<Product> productsService;
+        private readonly IDeletableEntityRepository<Product> productsRepository;
 
-        public ProductsService(IDeletableEntityRepository<Product> productsService)
+        public ProductsService(IDeletableEntityRepository<Product> productRepository)
         {
-            this.productsService = productsService;
+            this.productsRepository = productRepository;
         }
 
         public async Task CreateAsync(CreateProductInputModel input, string userId, string imagePath)
@@ -65,21 +66,21 @@ namespace PrismWear.Services.Data
                 }
             }
 
-            await this.productsService.AddAsync(product);
-            await this.productsService.SaveChangesAsync();
+            await this.productsRepository.AddAsync(product);
+            await this.productsRepository.SaveChangesAsync();
         }
 
         
         public async Task DeleteAsync(int id)
         {
-           var product=this.productsService.All().FirstOrDefault(x=>x.Id==id);
-           this.productsService.Delete(product);
-            await this.productsService.SaveChangesAsync();
+           var product=this.productsRepository.All().FirstOrDefault(x=>x.Id==id);
+           this.productsRepository.Delete(product);
+            await this.productsRepository.SaveChangesAsync();
         }
 
         public async Task EditAsync(int id, EditProductInputModel viewModel)
         {
-            var product = this.productsService
+            var product = this.productsRepository
       .All()                             
       .Include(x => x.ProductDetails)
       .FirstOrDefault(x => x.Id == id);
@@ -105,12 +106,12 @@ namespace PrismWear.Services.Data
                 }
             }
 
-                await this.productsService.SaveChangesAsync();
+                await this.productsRepository.SaveChangesAsync();
         }
 
         public IEnumerable<ProductInListViewModel> GetAll(int page, int itemsPerPage = 2)
         {
-            return this.productsService.AllAsNoTracking()
+            return this.productsRepository.AllAsNoTracking()
                 .OrderByDescending(x=>x.Id)
                 .Skip((page-1)*itemsPerPage)
                 .Take(itemsPerPage)
@@ -126,9 +127,30 @@ namespace PrismWear.Services.Data
                 .ToList();
         }
 
+        public IEnumerable<ProductInListViewModel> GetProductsByCategory(int categoryId)
+        {
+            var query = productsRepository.All()
+                .Include(p => p.Images)
+                .Include(p => p.Category)
+                .AsQueryable();
+
+                query = query.Where(p => p.CategoryId == categoryId);
+
+
+            // Convert to ViewModel before returning
+            return query.Select(p => new ProductInListViewModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                CategoryId = p.CategoryId,
+                CategoryName = p.Category.Name,
+                Images= p.Images,
+            }).ToList();
+        }
+
         public SingleProductViewModel GetById(int id)
         {
-            var result = this.productsService
+            var result = this.productsRepository
                 .AllAsNoTracking()
                 .Where(x => x.Id == id)
                 .Select(x => new SingleProductViewModel
@@ -156,7 +178,7 @@ namespace PrismWear.Services.Data
 
         public EditProductInputModel GetByIdEdit(int id)
         {
-            var result = this.productsService
+            var result = this.productsRepository
                 .AllAsNoTracking()
                 .Where(x => x.Id == id)
                 .Select(x => new EditProductInputModel
@@ -182,7 +204,7 @@ namespace PrismWear.Services.Data
 
         public int GetCount()
         {
-            return this.productsService.All().Count();
+            return this.productsRepository.All().Count();
         }
     }
 }

@@ -1,19 +1,21 @@
-﻿@using PrismWear.Data.Models
-@model IEnumerable<Product>
+﻿@using PrismWear.Web.ViewModels.Products
+@model IEnumerable<ProductInListViewModel>
+
+@if (!Model.Any())
+{
+    <p>No products found.</p>
+}
+
 @foreach (var product in Model)
 {
-    <div class="product-card">
-        <img src="@($"/images/products/{product.Images.FirstOrDefault()?.Id}.{product.Images.FirstOrDefault()?.Extension}")" alt="@product.Name" />
-        <h3>@product.Name</h3>
-        <p>Price: @product.Price</p>
-
-         <p>
-                Sizes:
-                @foreach (var size in product.ProductDetails)
-                {
-                    <span>@size.Size</span>
-                }
-        </p>
-        
+    <div class="media col-md-4">
+        <img src="@($"/images/products/{product.Images.FirstOrDefault()?.Id}.{product.Images.FirstOrDefault()?.Extension}" ?? "/images/default-product.png")"
+             class="mr-3" width="100" alt="@product.Name" />
+        <div class="media-body">
+            <h5 class="mt-0">
+                <a asp-action="ById" asp-route-id="@product.Id">@product.Name</a>
+            </h5>
+            <p>@product.CategoryName</p>
+        </div>
     </div>
 }

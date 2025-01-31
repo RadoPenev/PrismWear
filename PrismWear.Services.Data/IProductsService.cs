@@ -1,4 +1,5 @@
-﻿using PrismWear.Web.ViewModels;
+﻿using PrismWear.Data.Models;
+using PrismWear.Web.ViewModels;
 using PrismWear.Web.ViewModels.Products;
 
 namespace PrismWear.Services.Data
@@ -18,5 +19,6 @@ namespace PrismWear.Services.Data
         Task DeleteAsync(int id);
 
         Task EditAsync(int id, EditProductInputModel viewModel);
+        public IEnumerable<ProductInListViewModel> GetProductsByCategory(int categoryId);
     }
 }

@@ -11,18 +11,18 @@ namespace PrismWear.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly IProductsService productsService;
+        private readonly IProductsService productService;
         private readonly ICategoriesService categoriesService;
         private readonly UserManager<IdentityUser> userManager;
         private readonly IWebHostEnvironment environment;
 
-        public ProductsController(IProductsService productsService,
+        public ProductsController(IProductsService productService,
             ICategoriesService categoriesService,
             UserManager<IdentityUser> userManager,
              IWebHostEnvironment environment)
         {
             
-            this.productsService = productsService;
+            this.productService = productService;
             this.categoriesService = categoriesService;
             this.userManager = userManager;
             this.environment = environment;
@@ -63,7 +63,7 @@ namespace PrismWear.Controllers
 
             try
             {
-                await this.productsService.CreateAsync(input, user.Id, $"{this.environment.WebRootPath}/images");
+                await this.productService.CreateAsync(input, user.Id, $"{this.environment.WebRootPath}/images");
             }
             catch (Exception ex)
             {
@@ -78,7 +78,7 @@ namespace PrismWear.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            await this.productsService.DeleteAsync(id);
+            await this.productService.DeleteAsync(id);
             return this.RedirectToAction("All");
         }
 
@@ -87,8 +87,8 @@ namespace PrismWear.Controllers
         public IActionResult All(int pageNumber=1)
         {
             const int ItemsPerPage = 2;
-            var products = this.productsService.GetAll(pageNumber, ItemsPerPage);
-            var totalProductsCount = this.productsService.GetCount();
+            var products = this.productService.GetAll(pageNumber, ItemsPerPage);
+            var totalProductsCount = this.productService.GetCount();
             var viewModel = new ProductListViewModel
             {
                 Products = products,
@@ -100,9 +100,16 @@ namespace PrismWear.Controllers
             return View(viewModel);
         }
 
+        [HttpGet]
+        public IActionResult Filter(int categoryId)
+        {
+            var filteredProducts = productService.GetProductsByCategory(categoryId);
+            return PartialView("_ProductsPartial", filteredProducts);
+        }
+
         public IActionResult ById(int id)
         {
-            var product = this.productsService.GetById(id);
+            var product = this.productService.GetById(id);
 
             return this.View(product);
         }
@@ -110,7 +117,7 @@ namespace PrismWear.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var viewModel = this.productsService.GetByIdEdit(id);
+            var viewModel = this.productService.GetByIdEdit(id);
             if (viewModel == null)
             {
                 return NotFound();
@@ -132,7 +139,7 @@ namespace PrismWear.Controllers
                 return this.View(input);
             }
 
-            await this.productsService.EditAsync(id, input);
+            await this.productService.EditAsync(id, input);
             return this.RedirectToAction("All");
         }
 

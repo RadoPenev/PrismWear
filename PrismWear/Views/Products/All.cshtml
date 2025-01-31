@@ -7,24 +7,26 @@
 
 <h1>@this.ViewData["Title"]</h1>
 
-<div class="row">
-    @foreach (var product in Model.Products)
+<label for="categoryFilter">Filter by Category:</label>
+<select id="categoryFilter" class="form-control">
+    <option value="">All Categories</option>
+    @foreach (var category in Model.Products.Select(p => new { p.CategoryId, p.CategoryName }).Distinct())
     {
-        <div class="media col-md-4">
-            <img src="@($"/images/products/{product.Images.FirstOrDefault()?.Id}.{product.Images.FirstOrDefault()?.Extension}")"
-                 class="mr-3" width="100" alt="@product.Name" />
-            <div class="media-body">
-                <h5 class="mt-0">
-                    <a asp-action="ById" asp-route-id="@product.Id">@product.Name</a>
-                </h5>
-                <p>@product.CategoryName</p>
-            </div>
-        </div>
+        <option value="@category.CategoryId">@category.CategoryName</option>
     }
+</select>
+
+<br />
+
+<div id="product-container">
+    @await Html.PartialAsync("_ProductsPartial", Model.Products)
+</div>
+
+<div id="loading" style="display: none;">
+    <p>Loading...</p>
 </div>
 
 <hr />
-
 <nav aria-label="Product Pagination">
     <ul class="pagination">
         <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
@@ -43,3 +45,30 @@
         </li>
     </ul>
 </nav>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#categoryFilter').change(function () {
+                var categoryId = $(this).val();
+
+                $('#loading').show();
+
+                $.ajax({
+                    url: '/Products/Filter',
+                    type: 'GET',
+                    data: { categoryId: categoryId },
+                    success: function (data) {
+                        $('#product-container').html(data);
+                    },
+                    error: function () {
+                        alert('Error loading products.');
+                    },
+                    complete: function () {
+                        $('#loading').hide();
+                    }
+                });
+            });
+        });
+    </script>
+}
