@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PrismWear.Web.ViewModels.Sizes;
+using System.ComponentModel.DataAnnotations;
 
 namespace PrismWear.Web.ViewModels.Products
 {
@@ -18,12 +19,10 @@ namespace PrismWear.Web.ViewModels.Products
         [Range(0.01, double.MaxValue, ErrorMessage = "Price must be a positive value.")]
         public double Price { get; set; }
 
-        [Required(ErrorMessage = "Size is required.")]
-        [StringLength(10, ErrorMessage = "The size must not exceed {1} characters.")]
-        public string Size { get; set; }
-
         [Required(ErrorMessage = "Category is required.")]
         public int CategoryId { get; set; }
+
+        public List<ProductDetailViewModel> Sizes { get; set; }
         public IEnumerable<KeyValuePair<string, string>> CategoriesItems { get; set; }
     }
 }

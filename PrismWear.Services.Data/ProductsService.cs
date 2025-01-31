@@ -1,7 +1,9 @@
-﻿using PrismWear.Data.Common.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using PrismWear.Data.Common.Repositories;
 using PrismWear.Data.Models;
 using PrismWear.Web.ViewModels;
 using PrismWear.Web.ViewModels.Products;
+using PrismWear.Web.ViewModels.Sizes;
 
 namespace PrismWear.Services.Data
 {
@@ -16,6 +18,8 @@ namespace PrismWear.Services.Data
 
         public async Task CreateAsync(CreateProductInputModel input, string userId, string imagePath)
         {
+            
+
             var product = new Product
             {
                 Description = input.Description,
@@ -23,8 +27,17 @@ namespace PrismWear.Services.Data
                 AddedByUser = userId,
                 Name = input.Name,
                 Price = input.Price,
-                Size = input.Size,
             };
+
+            product.ProductDetails = input.Sizes
+       .Select(sq => new ProductDetail
+       {
+          
+           Size = sq.SizeName,
+           Quantity = sq.Quantity,
+           ProductId=product.Id,
+       })
+       .ToList();
 
             Directory.CreateDirectory($"{imagePath}/products/");
 
@@ -67,17 +80,32 @@ namespace PrismWear.Services.Data
         public async Task EditAsync(int id, EditProductInputModel viewModel)
         {
             var product = this.productsService
-                .All()
-                .FirstOrDefault(x => x.Id == id);           
+      .All()                             
+      .Include(x => x.ProductDetails)
+      .FirstOrDefault(x => x.Id == id);
 
-            product.Id = id;
+            if (product == null)
+            {
+                throw new NullReferenceException($"No product found with ID {id}.");
+            }
+
             product.Name = viewModel.Name;
             product.Description = viewModel.Description;
-            product.Size = viewModel.Size;
             product.Price = viewModel.Price;
             product.CategoryId = viewModel.CategoryId;
 
-            await this.productsService.SaveChangesAsync();
+            var detailDict = product.ProductDetails
+                .ToDictionary(d => d.Size, StringComparer.OrdinalIgnoreCase);
+
+            foreach (var sizeModel in viewModel.Sizes)
+            {
+                if (detailDict.TryGetValue(sizeModel.Size, out var existingDetail))
+                {
+                    existingDetail.Quantity = sizeModel.Quantity;
+                }
+            }
+
+                await this.productsService.SaveChangesAsync();
         }
 
         public IEnumerable<ProductInListViewModel> GetAll(int page, int itemsPerPage = 12)
@@ -108,10 +136,16 @@ namespace PrismWear.Services.Data
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
-                    Size = x.Size,
                     ImageUrl = $"/images/products/{x.Images.FirstOrDefault().Id}.{x.Images.FirstOrDefault().Extension}",
                     Price = x.Price,
                     CategoryName = x.Category.Name,
+                    Details = x.ProductDetails
+                .Select(d => new ProductDetailViewModel
+                {
+                    Size = d.Size,
+                    Quantity = d.Quantity,
+                })
+                .ToList(),
                 })
                 .FirstOrDefault();
 
@@ -130,8 +164,14 @@ namespace PrismWear.Services.Data
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
-                    Size = x.Size,
                     Price = x.Price,
+                    Sizes = x.ProductDetails
+                    .Select(d => new ProductDetailViewModel
+                     {
+                         Size = d.Size,
+                         Quantity = d.Quantity,
+                     })
+                .ToList(),
                 })
                 .FirstOrDefault();
 

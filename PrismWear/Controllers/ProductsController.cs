@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PrismWear.Data.Models;
 using PrismWear.Services.Data;
 using PrismWear.Web.ViewModels;
 using PrismWear.Web.ViewModels.Products;
+using PrismWear.Web.ViewModels.Sizes;
 
 namespace PrismWear.Controllers
 {
@@ -31,6 +33,16 @@ namespace PrismWear.Controllers
         {
             var viewModel = new CreateProductInputModel();
             viewModel.CategoriesItems = this.categoriesService.GetAllAsKeyValuePairs();
+
+            var allSizes= new[] { "XS", "S", "M", "L", "XL" };
+
+            viewModel.Sizes = allSizes.Select(s => new SizeQuantityViewModel
+            {
+                SizeName = s,
+                Quantity = 0
+            }).ToList();
+
+
             return View(viewModel);
         }
 
@@ -46,7 +58,9 @@ namespace PrismWear.Controllers
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
+
             
+
             try
             {
                 await this.productsService.CreateAsync(input, user.Id, $"{this.environment.WebRootPath}/images");

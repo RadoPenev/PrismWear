@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PrismWear.Data.Common.Models;
 using PrismWear.Data.Models;
+using System.Reflection.Emit;
 
 namespace PrismWear.Data
 {
@@ -26,11 +27,12 @@ namespace PrismWear.Data
         public DbSet<OrderItem> OrderItems { get; set; }
 
         public DbSet<Image> Images { get; set; }
+
+        public DbSet<ProductDetail> ProductDetails { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            // Apply global query filters for entities implementing IDeletableEntity
             foreach (var entityType in builder.Model.GetEntityTypes())
             {
                 if (typeof(IDeletableEntity).IsAssignableFrom(entityType.ClrType))

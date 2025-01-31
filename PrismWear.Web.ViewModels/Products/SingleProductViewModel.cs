@@ -1,4 +1,6 @@
-﻿namespace PrismWear.Web.ViewModels.Products
+﻿using PrismWear.Web.ViewModels.Sizes;
+
+namespace PrismWear.Web.ViewModels.Products
 {
     public class SingleProductViewModel
     {
@@ -11,10 +13,13 @@
         public string Size { get; set; }
 
         public string? ImageUrl { get; set; }
+
         public double Price { get; set; }
 
-
         public string CategoryName { get; set; }
+
+        public List<ProductDetailViewModel> Details { get; set; }
+
 
     }
 }

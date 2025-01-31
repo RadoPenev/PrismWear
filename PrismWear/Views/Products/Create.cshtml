@@ -41,18 +41,32 @@
         </div>
 
         <!-- Size -->
-        <div class="mb-3">
-            <label asp-for="Size" class="form-label fw-bold"></label>
-            <select asp-for="Size" class="form-select">
-                <option value="">Select size</option>
-                <option value="XS">XS</option>
-                <option value="S">S</option>
-                <option value="M">M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
-            </select>
-            <span asp-validation-for="Size" class="text-danger"></span>
-        </div>
+        <h5>Sizes & Quantities</h5>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Size</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Sizes.Count(); i++)
+                {
+                    <tr>
+                        <td>
+                            <!-- Display the size name -->
+                            @Model.Sizes[i].SizeName
+                            <!-- We store Size in a hidden input so that it posts back -->
+                            <input asp-for="@Model.Sizes[i].SizeName" type="hidden" />
+                        </td>
+                        <td>
+                            <!-- Editable quantity field -->
+                            <input asp-for="@Model.Sizes[i].Quantity" class="form-control" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
         <!-- Upload Images -->
         <div class="mb-3">
