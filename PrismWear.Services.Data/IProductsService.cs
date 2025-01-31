@@ -7,7 +7,7 @@ namespace PrismWear.Services.Data
     {
         Task CreateAsync(CreateProductInputModel input, string userId, string imagePath);
 
-        IEnumerable<ProductInListViewModel> GetAll(int page, int itemsPerPage = 12);
+        IEnumerable<ProductInListViewModel> GetAll(int page, int itemsPerPage = 2);
 
         int GetCount();
 

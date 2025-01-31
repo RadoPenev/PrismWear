@@ -1,10 +1,19 @@
-﻿@model IEnumerable<PrismWear.Models.Product>
-
+﻿@using PrismWear.Data.Models
+@model IEnumerable<Product>
 @foreach (var product in Model)
 {
-    <div class="product-item">
+    <div class="product-card">
+        <img src="@($"/images/products/{product.Images.FirstOrDefault()?.Id}.{product.Images.FirstOrDefault()?.Extension}")" alt="@product.Name" />
         <h3>@product.Name</h3>
         <p>Price: @product.Price</p>
-        <p>Size: @product.Size</p>
+
+         <p>
+                Sizes:
+                @foreach (var size in product.ProductDetails)
+                {
+                    <span>@size.Size</span>
+                }
+        </p>
+        
     </div>
 }

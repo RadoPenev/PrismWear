@@ -108,7 +108,7 @@ namespace PrismWear.Services.Data
                 await this.productsService.SaveChangesAsync();
         }
 
-        public IEnumerable<ProductInListViewModel> GetAll(int page, int itemsPerPage = 12)
+        public IEnumerable<ProductInListViewModel> GetAll(int page, int itemsPerPage = 2)
         {
             return this.productsService.AllAsNoTracking()
                 .OrderByDescending(x=>x.Id)

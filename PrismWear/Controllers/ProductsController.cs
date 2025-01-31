@@ -84,13 +84,11 @@ namespace PrismWear.Controllers
 
 
 
-        public IActionResult All(int pageNumber = 1)
+        public IActionResult All(int pageNumber=1)
         {
-            const int ItemsPerPage = 12;
-
+            const int ItemsPerPage = 2;
             var products = this.productsService.GetAll(pageNumber, ItemsPerPage);
             var totalProductsCount = this.productsService.GetCount();
-
             var viewModel = new ProductListViewModel
             {
                 Products = products,

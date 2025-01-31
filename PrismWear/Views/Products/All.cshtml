@@ -8,59 +8,38 @@
 <h1>@this.ViewData["Title"]</h1>
 
 <div class="row">
-    <div class="media col-md-4">
-        @foreach (var product in Model.Products)
-        {
-            <img src="@($"/images/products/{product.Images.FirstOrDefault()?.Id}.{product.Images.FirstOrDefault()?.Extension}")" class="mr-3" width="100" />
+    @foreach (var product in Model.Products)
+    {
+        <div class="media col-md-4">
+            <img src="@($"/images/products/{product.Images.FirstOrDefault()?.Id}.{product.Images.FirstOrDefault()?.Extension}")"
+                 class="mr-3" width="100" alt="@product.Name" />
             <div class="media-body">
-                <h5 class="mt-0"><a asp-action="ById" asp-route-id="@product.Id">@product.Name</a></h5>
-                @product.CategoryName
+                <h5 class="mt-0">
+                    <a asp-action="ById" asp-route-id="@product.Id">@product.Name</a>
+                </h5>
+                <p>@product.CategoryName</p>
             </div>
-        }
-    </div>
+        </div>
+    }
 </div>
+
 <hr />
-<nav aria-label="...">
+
+<nav aria-label="Product Pagination">
     <ul class="pagination">
-        <li class="page-item @if(!Model.HasPreviousPage){
-        <text>disabled</text>
-}">
-            <a class="page-link" asp-action="All" asp-route-id="@Model.PreviousPageNumber">Previous</a>
-        </li>
-        @if (Model.PageNumber < 4)
-        {
-            for (int i = 1; i < Model.PageNumber; i++)
-            {
-                <li class="page-item"><a class="page-link" asp-action="All" asp-route-id="@i">@i</a></li>
-            }
-        }
-        else
-        {
-            for (int i = Model.PageNumber - 3; i < Model.PageNumber; i++)
-            {
-                <li class="page-item"><a class="page-link" asp-action="All" asp-route-id="@i">@i</a></li>
-            }
-        }
-
-        <li class="page-item active">
-            <span class="page-link">
-                @Model.PageNumber
-            </span>
+        <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+            <a class="page-link" asp-action="All" asp-route-pageNumber="@Model.PreviousPageNumber">Previous</a>
         </li>
 
-        @for (int i = Model.PageNumber + 1; i < Model.PageNumber + 4; i++)
+        @for (int i = 1; i <= Model.PagesCount; i++)
         {
-            if (i <= Model.PagesCount)
-            {
-                <li class="page-item">
-                    <a class="page-link" asp-action="All" asp-route-id="@i">@i</a>
-                </li>
-            }
+            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                <a class="page-link" asp-action="All" asp-route-pageNumber="@i">@i</a>
+            </li>
         }
+
         <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
-            <a class="page-link" asp-action="All" asp-route-id="@Model.NextPageNumber"
-               tabindex="@(Model.HasNextPage ? "0" : "-1")">Next</a>
+            <a class="page-link" asp-action="All" asp-route-pageNumber="@Model.NextPageNumber">Next</a>
         </li>
-
     </ul>
 </nav>
