@@ -86,7 +86,7 @@ namespace PrismWear.Controllers
 
         public IActionResult All(int pageNumber=1)
         {
-            const int ItemsPerPage = 2;
+            const int ItemsPerPage = 8;
             var products = this.productService.GetAll(pageNumber, ItemsPerPage);
             var totalProductsCount = this.productService.GetCount();
             var viewModel = new ProductListViewModel
@@ -101,11 +101,12 @@ namespace PrismWear.Controllers
         }
 
         [HttpGet]
-        public IActionResult Filter(int categoryId)
+        public IActionResult Filter(int? categoryId, double? minPrice, double? maxPrice, string size)
         {
-            var filteredProducts = productService.GetProductsByCategory(categoryId);
+            var filteredProducts = productService.GetFilteredProducts(categoryId, minPrice, maxPrice);
             return PartialView("_ProductsPartial", filteredProducts);
         }
+
 
         public IActionResult ById(int id)
         {

@@ -5,6 +5,7 @@ using PrismWear.Data.Models;
 using PrismWear.Web.ViewModels;
 using PrismWear.Web.ViewModels.Products;
 using PrismWear.Web.ViewModels.Sizes;
+using System.Linq;
 
 namespace PrismWear.Services.Data
 {
@@ -109,7 +110,7 @@ namespace PrismWear.Services.Data
                 await this.productsRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<ProductInListViewModel> GetAll(int page, int itemsPerPage = 2)
+        public IEnumerable<ProductInListViewModel> GetAll(int page, int itemsPerPage = 8)
         {
             return this.productsRepository.AllAsNoTracking()
                 .OrderByDescending(x=>x.Id)
@@ -127,26 +128,45 @@ namespace PrismWear.Services.Data
                 .ToList();
         }
 
-        public IEnumerable<ProductInListViewModel> GetProductsByCategory(int categoryId)
+        public IEnumerable<ProductInListViewModel> GetFilteredProducts(int? categoryId, double? minPrice, double? maxPrice)
         {
             var query = productsRepository.All()
                 .Include(p => p.Images)
                 .Include(p => p.Category)
+                .Include(p=>p.ProductDetails)
                 .AsQueryable();
 
-                query = query.Where(p => p.CategoryId == categoryId);
+            if (categoryId.HasValue && categoryId.Value > 0)
+            {
+                query = query.Where(p => p.CategoryId == categoryId.Value);
+            }
+            if (categoryId.HasValue)
+            {
+                query = query.Where(p => p.CategoryId == categoryId.Value);
+            }
 
+            if (minPrice.HasValue)
+            {
+                query = query.Where(p => p.Price >= minPrice.Value);
+            }
 
-            // Convert to ViewModel before returning
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(p => p.Price <= maxPrice.Value);
+            }
+
+            
+
             return query.Select(p => new ProductInListViewModel
             {
                 Id = p.Id,
                 Name = p.Name,
                 CategoryId = p.CategoryId,
                 CategoryName = p.Category.Name,
-                Images= p.Images,
+                Images = p.Images,
             }).ToList();
         }
+
 
         public SingleProductViewModel GetById(int id)
         {
@@ -206,5 +226,7 @@ namespace PrismWear.Services.Data
         {
             return this.productsRepository.All().Count();
         }
+
+       
     }
 }
