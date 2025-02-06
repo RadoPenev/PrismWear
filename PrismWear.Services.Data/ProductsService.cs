@@ -1,11 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using PrismWear.Data.Common.Repositories;
 using PrismWear.Data.Models;
 using PrismWear.Web.ViewModels;
 using PrismWear.Web.ViewModels.Products;
 using PrismWear.Web.ViewModels.Sizes;
-using System.Linq;
 
 namespace PrismWear.Services.Data
 {
@@ -110,6 +108,47 @@ namespace PrismWear.Services.Data
                 await this.productsRepository.SaveChangesAsync();
         }
 
+        public IEnumerable<ProductInListViewModel> GetProducts(FiltersViewModel filters, int page, int itemsPerPage = 8)
+        {
+            var query = this.productsRepository
+                .AllAsNoTracking()
+                .Include(p => p.Images)
+                .Include(p => p.Category)
+                .AsQueryable();
+
+            if (filters.CategoryId > 0)
+            {
+                query = query.Where(p => p.CategoryId == filters.CategoryId);
+            }
+
+            if (filters.MinPrice.HasValue)
+            {
+                query = query.Where(p => p.Price >= filters.MinPrice.Value);
+            }
+
+            if (filters.MaxPrice.HasValue)
+            {
+                query = query.Where(p => p.Price <= filters.MaxPrice.Value);
+            }
+
+            query = query
+                .OrderByDescending(x => x.Id)
+                .Skip((page - 1) * itemsPerPage)
+                .Take(itemsPerPage);
+
+            return query
+                .Select(product => new ProductInListViewModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    CategoryId = product.CategoryId,
+                    CategoryName = product.Category.Name,
+                    Price = product.Price,
+                    Images = product.Images,
+                })
+                .ToList();
+        }
+
         public IEnumerable<ProductInListViewModel> GetAll(int page, int itemsPerPage = 8)
         {
             return this.productsRepository.AllAsNoTracking()
@@ -123,7 +162,7 @@ namespace PrismWear.Services.Data
                     CategoryId=product.CategoryId,
                     Images = product.Images,
                     CategoryName=product.Category.Name,
-                    
+                    Price = product.Price,
                 })
                 .ToList();
         }
@@ -164,6 +203,7 @@ namespace PrismWear.Services.Data
                 CategoryId = p.CategoryId,
                 CategoryName = p.Category.Name,
                 Images = p.Images,
+                Price = p.Price,
             }).ToList();
         }
 

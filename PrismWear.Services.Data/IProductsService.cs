@@ -7,9 +7,7 @@ namespace PrismWear.Services.Data
     public interface IProductsService
     {
         Task CreateAsync(CreateProductInputModel input, string userId, string imagePath);
-
-        IEnumerable<ProductInListViewModel> GetAll(int page, int itemsPerPage = 8);
-
+        IEnumerable<ProductInListViewModel> GetProducts(FiltersViewModel filters, int page, int itemsPerPage = 8);
         int GetCount();
 
         SingleProductViewModel GetById(int id);
@@ -19,7 +17,6 @@ namespace PrismWear.Services.Data
         Task DeleteAsync(int id);
 
         Task EditAsync(int id, EditProductInputModel viewModel);
-        public IEnumerable<ProductInListViewModel> GetFilteredProducts(int? categoryId, double? minPrice, double? maxPrice);
 
     }
 }

@@ -3,6 +3,7 @@
     public class ProductListViewModel
     {
         public IEnumerable<ProductInListViewModel> Products { get; set; }
+        public FiltersViewModel Filters { get; set; }
         public bool HasPreviousPage => this.PageNumber > 1;
         public bool HasNextPage => this.PageNumber < this.PagesCount;
         public int PreviousPageNumber => this.PageNumber - 1;

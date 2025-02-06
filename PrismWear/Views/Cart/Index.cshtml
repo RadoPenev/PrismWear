@@ -1,0 +1,167 @@
+﻿@using PrismWear.Web.ViewModels.Cart
+@model IEnumerable<CartItemViewModel>
+
+@{
+    ViewData["Title"] = "Your Cart";
+}
+
+<div class="container py-4">
+    <h1 class="mb-4">Shopping Cart</h1>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Your cart is currently empty.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle table-hover" id="cartTable">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" style="width: 8rem;"></th>
+                        <th scope="col">Продукт</th>
+                        <th scope="col" class="text-end">Цена</th>
+                        <th scope="col" class="text-center">Количество</th>
+                        <th scope="col" class="text-end">Субтотал</th>
+                        <th scope="col" class="text-end"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var subtotal = item.Price * item.Quantity;
+                       
+
+                        <tr data-productid="@item.ProductId">
+                            <td>
+                                <img src="@item.ImageUrl"
+                                     class="card-img-top"
+                                     alt="@item.Name" />
+                            </td>
+                            <td>
+                                <strong>@item.Name</strong><br />
+                                <small class="text-muted">@item.CategoryName</small>
+                            </td>
+                            <td class="text-end price" data-price="@item.Price">
+                                @item.Price.ToString("F2") лв.
+                            </td>
+                            <td class="text-center">
+                                <div class="input-group input-group-sm mx-auto" style="max-width: 6rem;">
+                                    <input type="number"
+                                           name="quantity"
+                                           value="@item.Quantity"
+                                           min="1"
+                                           class="form-control text-center quantity-input" />
+                                </div>
+                            </td>
+                            <td class="text-end subtotal">
+                                @subtotal.ToString("F2") лв.
+                            </td>
+                            <td class="text-end">
+                                <button class="btn btn-link text-danger remove-item-btn" data-productid="@item.ProductId">Remove</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        var total = Model.Sum(i => i.Price * i.Quantity);
+
+        <div class="d-flex justify-content-end mt-3">
+            <div class="text-end">
+                <h4>Total: <span id="cartTotal">@total.ToString("F2")</span> лв.</h4>
+                <a asp-action="Checkout" asp-controller="Cart" class="btn btn-success">
+                    Proceed to Checkout
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Automatically update subtotal when quantity is changed
+            $('.quantity-input').on('input', function () {
+                var input = $(this);
+                var row = input.closest('tr');
+                var productId = row.data('productid');
+                var quantity = parseInt(input.val());
+                var price = parseFloat(row.find('.price').data('price'));
+
+                if (quantity < 1 || isNaN(quantity)) {
+                    quantity = 1;
+                    input.val(1);
+                }
+
+                // Update subtotal in the UI
+                var newSubtotal = price * quantity;
+                row.find('.subtotal').text(newSubtotal.toFixed(2) + ' лв.');
+
+                // Recalculate total
+                var total = 0;
+                $('#cartTable tbody tr').each(function () {
+                    var subText = $(this).find('.subtotal').text();
+                    var subValue = parseFloat(subText.replace(' лв.', ''));
+                    total += subValue;
+                });
+                $('#cartTotal').text(total.toFixed(2));
+
+                // Send AJAX request to update the cart
+                $.ajax({
+                    type: 'POST',
+                    url: '/Cart/UpdateQuantity',
+                    data: { productId: productId, quantity: quantity },
+                    success: function (response) {
+                        // Update cart badge if applicable
+                        if (response.totalItemCount !== undefined) {
+                            $('#cart-badge').text(response.totalItemCount);
+                        }
+                    },
+                    error: function () {
+                        alert('Error updating quantity.');
+                    }
+                });
+            });
+
+            // Remove item dynamically
+            $('.remove-item-btn').on('click', function (e) {
+                e.preventDefault();
+                var btn = $(this);
+                var productId = btn.data('productid');
+                var row = btn.closest('tr');
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Cart/Remove',
+                    data: { productId: productId },
+                    success: function (response) {
+                        // Remove the row from the table
+                        row.remove();
+
+                        // Recalculate the total
+                        var total = 0;
+                        $('#cartTable tbody tr').each(function () {
+                            var subText = $(this).find('.subtotal').text();
+                            var subValue = parseFloat(subText.replace(' лв.', ''));
+                            total += subValue;
+                        });
+                        $('#cartTotal').text(total.toFixed(2));
+
+                        // Update the cart badge if available
+                        if (response.totalItemCount !== undefined) {
+                            $('#cart-badge').text(response.totalItemCount);
+                        }
+                    },
+                    error: function () {
+                        alert('Error removing item.');
+                    }
+                });
+            });
+        });
+    </script>
+}

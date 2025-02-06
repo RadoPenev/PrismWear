@@ -36,7 +36,7 @@ namespace PrismWear
 
             builder.Services.AddTransient<ICategoriesService, CategoriesService>();
             builder.Services.AddTransient<IProductsService, ProductsService>();
-
+            builder.Services.AddTransient<ICartService, CartService>();
             var app = builder.Build();
             if (app.Environment.IsDevelopment())
             {
