@@ -85,7 +85,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
-            // Automatically update subtotal when quantity is changed
             $('.quantity-input').on('input', function () {
                 var input = $(this);
                 var row = input.closest('tr');
@@ -98,11 +97,9 @@
                     input.val(1);
                 }
 
-                // Update subtotal in the UI
                 var newSubtotal = price * quantity;
                 row.find('.subtotal').text(newSubtotal.toFixed(2) + ' лв.');
 
-                // Recalculate total
                 var total = 0;
                 $('#cartTable tbody tr').each(function () {
                     var subText = $(this).find('.subtotal').text();
@@ -111,13 +108,11 @@
                 });
                 $('#cartTotal').text(total.toFixed(2));
 
-                // Send AJAX request to update the cart
                 $.ajax({
                     type: 'POST',
                     url: '/Cart/UpdateQuantity',
                     data: { productId: productId, quantity: quantity },
                     success: function (response) {
-                        // Update cart badge if applicable
                         if (response.totalItemCount !== undefined) {
                             $('#cart-badge').text(response.totalItemCount);
                         }
@@ -128,7 +123,6 @@
                 });
             });
 
-            // Remove item dynamically
             $('.remove-item-btn').on('click', function (e) {
                 e.preventDefault();
                 var btn = $(this);
@@ -140,10 +134,8 @@
                     url: '/Cart/Remove',
                     data: { productId: productId },
                     success: function (response) {
-                        // Remove the row from the table
                         row.remove();
 
-                        // Recalculate the total
                         var total = 0;
                         $('#cartTable tbody tr').each(function () {
                             var subText = $(this).find('.subtotal').text();
@@ -152,7 +144,6 @@
                         });
                         $('#cartTotal').text(total.toFixed(2));
 
-                        // Update the cart badge if available
                         if (response.totalItemCount !== undefined) {
                             $('#cart-badge').text(response.totalItemCount);
                         }
