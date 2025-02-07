@@ -41,15 +41,15 @@ namespace PrismWear.Services.Data
                 CategoryName = ci.Product.Category?.Name ?? "Unknown Category",
                 Price = ci.Product.Price,
                 Quantity = ci.Quantity,
-                ImageUrl = $"/images/products/{ci.Product.Images.First().Id}.{ci.Product.Images.First().Extension}"
-                  
+                ImageUrl = $"/images/products/{ci.Product.Images.First().Id}.{ci.Product.Images.First().Extension}",
+                Size=ci.Size,
             });
 
             return items;
         }
 
 
-        public async Task AddToCartAsync(string userId, int productId, int quantity = 1)
+        public async Task AddToCartAsync(string userId, int productId, string size, int quantity = 1)
         {
             var cart = await cartRepository.All()
                 .Where(c => c.UserId == userId)
@@ -62,7 +62,8 @@ namespace PrismWear.Services.Data
                 await cartRepository.AddAsync(cart);
             }
 
-            var existingItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+            var existingItem = cart.CartItems
+                .FirstOrDefault(ci => ci.ProductId == productId && ci.Size == size);
 
             if (existingItem != null)
             {
@@ -74,7 +75,7 @@ namespace PrismWear.Services.Data
                 {
                     ProductId = productId,
                     Quantity = quantity,
-
+                    Size = size,
                 };
                 cart.CartItems.Add(newItem);
             }

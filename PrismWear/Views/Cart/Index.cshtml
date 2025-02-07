@@ -22,6 +22,7 @@
                     <tr>
                         <th scope="col" style="width: 8rem;"></th>
                         <th scope="col">Продукт</th>
+                        <th scope="col">Размер</th>
                         <th scope="col" class="text-end">Цена</th>
                         <th scope="col" class="text-center">Количество</th>
                         <th scope="col" class="text-end">Субтотал</th>
@@ -43,6 +44,9 @@
                             <td>
                                 <strong>@item.Name</strong><br />
                                 <small class="text-muted">@item.CategoryName</small>
+                            </td>
+                            <td>
+                                <strong>@item.Size</strong><br />
                             </td>
                             <td class="text-end price" data-price="@item.Price">
                                 @item.Price.ToString("F2") лв.
@@ -80,16 +84,17 @@
         </div>
     }
 </div>
-
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
+
             $('.quantity-input').on('input', function () {
                 var input = $(this);
                 var row = input.closest('tr');
                 var productId = row.data('productid');
                 var quantity = parseInt(input.val());
+
                 var price = parseFloat(row.find('.price').data('price'));
 
                 if (quantity < 1 || isNaN(quantity)) {
@@ -104,7 +109,9 @@
                 $('#cartTable tbody tr').each(function () {
                     var subText = $(this).find('.subtotal').text();
                     var subValue = parseFloat(subText.replace(' лв.', ''));
-                    total += subValue;
+                    if (!isNaN(subValue)) {
+                        total += subValue;
+                    }
                 });
                 $('#cartTotal').text(total.toFixed(2));
 
@@ -140,7 +147,9 @@
                         $('#cartTable tbody tr').each(function () {
                             var subText = $(this).find('.subtotal').text();
                             var subValue = parseFloat(subText.replace(' лв.', ''));
-                            total += subValue;
+                            if (!isNaN(subValue)) {
+                                total += subValue;
+                            }
                         });
                         $('#cartTotal').text(total.toFixed(2));
 

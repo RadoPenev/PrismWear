@@ -99,12 +99,10 @@
 </head>
 <body>
     <div class="product-page-container">
-        <!-- Product Image -->
         <div class="product-image-section">
             <img src="@Model.ImageUrl" alt="@Model.Name" />
         </div>
 
-        <!-- Product Details -->
         <div class="product-details-section">
             <div class="product-title">@Model.Name</div>
             <div class="product-category">@Model.CategoryName</div>
@@ -114,7 +112,6 @@
                 @Model.Description
             </div>
 
-            <!-- Size Selection -->
             <div class="size-options">
                 <label>Избери размер:</label>
                 @foreach (var detail in Model.Details)
@@ -127,7 +124,6 @@
                 }
             </div>
 
-            <!-- Add to Cart -->
             <div class="add-to-cart">
                 <input type="number" id="quantity" value="1" min="1" class="form-control quantity-input">
                 <button class="btn btn-dark add-to-cart-btn"
@@ -136,7 +132,6 @@
                 </button>
             </div>
 
-            <!-- Admin Controls (Edit/Delete) -->
             <div class="mt-3">
                 <a asp-controller="Products" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit</a>
                 <form asp-controller="Products" asp-action="Delete" asp-route-id="@Model.Id" method="post"
@@ -147,40 +142,35 @@
             </div>
         </div>
     </div>
+</body>
 
-    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $(".add-to-cart-btn").click(function (e) {
-                e.preventDefault();
+           $(".add-to-cart-btn").click(function (e) {
+        e.preventDefault();
 
-                var button = $(this);
-                var productId = button.data("productid");
-                var selectedSize = $("input[name='size']:checked").val();
-                var quantity = $("#quantity").val();
+        var button = $(this);
+        var productId = button.data("productid");
+        var selectedSize = $("input[name='size']:checked").val();
+        var quantity = $("#quantity").val();
 
-                if (!selectedSize) {
-                    alert("Моля, изберете размер!");
-                    return;
+        if (!selectedSize) {
+            alert("Please select a size!");
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/Cart/AddToCart",
+            data: { productId: productId, size: selectedSize, quantity: quantity },
+            success: function (response) {
+                if (response.totalItemCount !== undefined) {
+                    $("#cart-badge").text(response.totalItemCount);
                 }
-
-                $.ajax({
-                    type: "POST",
-                    url: "/Cart/AddToCart",
-                    data: { productId: productId, size: selectedSize, quantity: quantity },
-                    success: function (response) {
-                        alert("Продуктът е добавен в кошницата!");
-                        if (response.totalItemCount !== undefined) {
-                            $("#cart-badge").text(response.totalItemCount);
-                        }
-                    },
-                    error: function () {
-                        alert("Грешка при добавяне на продукта!");
-                    }
-                });
-            });
+            },
+            error: function () {
+                alert("Error adding product to cart!");
+            }
         });
+    });
     </script>
-</body>
-</html>
