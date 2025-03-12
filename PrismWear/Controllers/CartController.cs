@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PrismWear.Services.Data;
+using PrismWear.Web.ViewModels.Cart;
 using System.Security.Claims;
 
 namespace PrismWear.Controllers
@@ -63,10 +64,22 @@ namespace PrismWear.Controllers
             var totalItemCount = cartItems.Sum(ci => ci.Quantity);
             return Json(new { totalItemCount });
         }
+
+
         [HttpGet]
-        public IActionResult Checkout()
+        public async Task<IActionResult> Checkout()
         {
-            return View();
+            var user = await this.userManager.GetUserAsync(this.User);
+            var cartItems = await this._cartService.GetCartItemsAsync(user.Id);
+
+            var viewModel = new CartViewModel
+            {
+                Items = cartItems.ToList(),
+
+                ShippingCost = 0
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]

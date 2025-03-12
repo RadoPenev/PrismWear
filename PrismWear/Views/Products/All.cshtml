@@ -2,9 +2,7 @@
 @inject PrismWear.Services.Data.ICategoriesService _categoriesService
 @model ProductListViewModel
 
-@{
-    this.ViewData["Title"] = "All Products";
-}
+
 
 <h1 class="text-center mt-4">@this.ViewData["Title"]</h1>
 
@@ -14,6 +12,7 @@
         <!-- Use a GET form to capture user-selected filters. -->
         <form asp-controller="Products" asp-action="All" method="get">
             <div class="row g-3 align-items-center">
+                <!-- Category dropdown -->
                 <div class="col-md-4">
                     <label asp-for="Filters.CategoryId" class="form-label fw-bold">Category:</label>
                     <select asp-for="Filters.CategoryId" class="form-select">
@@ -25,6 +24,7 @@
                     </select>
                 </div>
 
+                <!-- Price range fields -->
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Price Range:</label>
                     <div class="input-group">
@@ -34,13 +34,30 @@
                     </div>
                 </div>
 
-                <div class="col-md-4 d-grid">
-                    <!-- Submit button that sends the user’s filters in the query string -->
+                <!-- Both buttons in a single col -->
+                <div class="col-md-4 d-flex justify-content-end align-items-center gap-2">
                     <button type="submit" class="btn btn-primary">
                         Apply Filters
                     </button>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <button type="button" class="button" onclick="window.location.href='@Url.Action("Create", "Products")'">
+                            <span class="button__text">Add Item</span>
+                            <span class="button__icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" fill="none">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </button>
+
+                    }
                 </div>
             </div>
+          
         </form>
     </div>
 </div>
@@ -98,3 +115,65 @@
         </li>
     </ul>
 </nav>
+
+<!-- Styles for the Add Item button -->
+<style>
+    /* From Uiverse.io by andrew-demchenk0 */
+    .button {
+        position: relative;
+        width: 150px;
+        height: 40px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        border: 1px solid #34974d;
+        background-color: #3aa856;
+    }
+
+    .button, .button__icon, .button__text {
+        transition: all 0.3s;
+    }
+
+    .button__text {
+        transform: translateX(30px);
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .button__icon {
+        position: absolute;
+        transform: translateX(109px);
+        height: 100%;
+        width: 39px;
+        background-color: #34974d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .button .svg {
+        width: 30px;
+        stroke: #fff;
+    }
+
+    .button:hover {
+        background: #34974d;
+    }
+
+        .button:hover .button__text {
+            color: transparent;
+        }
+
+        .button:hover .button__icon {
+            width: 148px;
+            transform: translateX(0);
+        }
+
+    .button:active .button__icon {
+        background-color: #2e8644;
+    }
+
+    .button:active {
+        border: 1px solid #2e8644;
+    }
+</style>

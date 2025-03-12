@@ -1,0 +1,136 @@
+﻿@model PrismWear.Web.ViewModels.Orders.OrderInputViewModel
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-body p-4">
+                    <h2 class="text-center mb-4">Checkout</h2>
+
+                    <!-- The form posts to OrderController.ProcessPayment [HttpPost] -->
+                    <form asp-controller="Order" asp-action="ProcessPayment" method="post">
+                        <!-- Hidden field for UserId (Required) -->
+                        <input asp-for="UserId" type="hidden" />
+
+                        <div class="row">
+                            <!-- FirstName -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="FirstName" class="form-label fw-bold"></label>
+                                    <input asp-for="FirstName" class="form-control" placeholder="Enter your first name" />
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!-- LastName -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="LastName" class="form-label fw-bold"></label>
+                                    <input asp-for="LastName" class="form-control" placeholder="Enter your last name" />
+                                    <span asp-validation-for="LastName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group mb-3">
+                            <label asp-for="Email" class="form-label fw-bold"></label>
+                            <input asp-for="Email" class="form-control" type="email" placeholder="Enter your email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <!-- Shipping Info -->
+                        <h5 class="mt-4">Shipping Information</h5>
+                        <hr />
+
+                        <!-- Address -->
+                        <div class="form-group mb-3">
+                            <label asp-for="ShippingAddressLine1" class="form-label fw-bold"></label>
+                            <input asp-for="ShippingAddressLine1" class="form-control" placeholder="Street address" />
+                            <span asp-validation-for="ShippingAddressLine1" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <!-- City -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="ShippingCity" class="form-label fw-bold"></label>
+                                    <input asp-for="ShippingCity" class="form-control" placeholder="City" />
+                                    <span asp-validation-for="ShippingCity" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <!-- State -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="ShippingState" class="form-label fw-bold"></label>
+                                    <input asp-for="ShippingState" class="form-control" placeholder="State/Province" />
+                                    <span asp-validation-for="ShippingState" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Zip -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="ShippingZipCode" class="form-label fw-bold"></label>
+                                    <input asp-for="ShippingZipCode" class="form-control" placeholder="ZIP Code" />
+                                    <span asp-validation-for="ShippingZipCode" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <!-- Country -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="ShippingCountry" class="form-label fw-bold"></label>
+                                    <input asp-for="ShippingCountry" class="form-control" placeholder="Country" />
+                                    <span asp-validation-for="ShippingCountry" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment / Order Summary -->
+                        <h5 class="mt-4">Payment Details</h5>
+                        <hr />
+
+                        <div class="form-group mb-3">
+                            <!-- Safely handle null or empty CartItems -->
+                            @if (Model.CartItems != null && Model.CartItems.Any())
+                            {
+                                <strong>
+                                    @Model.CartItems.Sum(x => x.Product.Price * x.Quantity).ToString("C")
+                                </strong>
+                            }
+                            else
+                            {
+                                <strong>0.00 лв.</strong>
+                            }
+                        </div>
+
+                        <!-- Hidden field for OrderId if needed -->
+                        <input asp-for="OrderId" type="hidden" />
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                Proceed to Payment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <p class="text-center text-muted mt-3">
+                <small>Secure Checkout &bullet; 100% Privacy Protection</small>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Make sure you have client-side validation scripts if using them -->
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">

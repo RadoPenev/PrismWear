@@ -64,11 +64,14 @@ namespace PrismWear.Controllers
             try
             {
                 await this.productService.CreateAsync(input, user.Id, $"{this.environment.WebRootPath}/images");
+                TempData["success"] = "Успешно добавихте продукт!";
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
             }
+
+
 
             return this.Redirect("/");
         }
@@ -79,6 +82,7 @@ namespace PrismWear.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await this.productService.DeleteAsync(id);
+            TempData["success"] = "Успешно изтрихте продукт!";
             return this.RedirectToAction("All");
         }
 
@@ -135,6 +139,7 @@ namespace PrismWear.Controllers
             }
 
             await this.productService.EditAsync(id, input);
+            TempData["success"] = "Успешно обработен продукт!";
             return this.RedirectToAction("All");
         }
 

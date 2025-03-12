@@ -1,0 +1,95 @@
+﻿@model PrismWear.Data.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-success text-white">
+                    <h4 class="card-title mb-0">Order Details</h4>
+                </div>
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Thank you for your order!</h2>
+
+                    <div class="mb-3">
+                        <p class="fw-bold">
+                            Status:
+                            <span class="badge bg-info">@Model.OrderStatus</span>
+                        </p>
+                        <p class="fw-bold">
+                            Total Amount:
+                            <span class="text-success">@Model.TotalAmount.ToString("C")</span>
+                        </p>
+                    </div>
+                    <hr />
+
+                    <h5 class="mb-3">Shipping Information</h5>
+                    <div class="mb-3">
+                        <p>
+                            <strong>Name:</strong>
+                            @Model.FirstName @Model.LastName
+                        </p>
+                        <p>
+                            <strong>Address:</strong>
+                            @Model.ShippingAddressLine1
+                            @* If you have AddressLine2, you can display it here as well *@
+                        </p>
+                        <p>
+                            <strong>City:</strong> @Model.ShippingCity
+                            <br />
+                            <strong>State:</strong> @Model.ShippingState
+                            <br />
+                            <strong>Zip Code:</strong> @Model.ShippingZipCode
+                            <br />
+                            <strong>Country:</strong> @Model.ShippingCountry
+                        </p>
+                    </div>
+                    <hr />
+
+                    @if (Model.OrderItems != null && Model.OrderItems.Any())
+                    {
+                        <h5 class="mb-3">Order Items</h5>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Product</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Unit Price</th>
+                                    <th scope="col">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.OrderItems)
+                                {
+                                    <tr>
+                                        <td>@item.Product.Name</td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.Price.ToString("C")</td>
+                                        <td>@(item.Quantity * item.Price).ToString("C")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No items found for this order.</p>
+                    }
+
+                    <hr />
+                    <div class="text-center">
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
+                            <i class="fas fa-shopping-cart me-2"></i>Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />

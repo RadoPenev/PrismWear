@@ -17,7 +17,18 @@ html {
   min-height: 100%;
 }
 
+@font-face {
+    font-family: 'CustomFont';
+    src: url('/fonts/font.ttf') format('ttf'), url('/fonts/font.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
-  margin-bottom: 60px;
+    background-image: url('/images/background/background2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: 'CustomFont', sans-serif;
 }
 

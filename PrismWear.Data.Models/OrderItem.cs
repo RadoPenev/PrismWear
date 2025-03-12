@@ -16,6 +16,8 @@ namespace PrismWear.Data.Models
 
         public decimal Price { get; set; }
 
+        public string Size { get; set; }
+
 
     }
 }

@@ -33,10 +33,14 @@ namespace PrismWear
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+          
+
+            
 
             builder.Services.AddTransient<ICategoriesService, CategoriesService>();
             builder.Services.AddTransient<IProductsService, ProductsService>();
             builder.Services.AddTransient<ICartService, CartService>();
+            builder.Services.AddTransient<IOrderService, OrderService>();
             var app = builder.Build();
             if (app.Environment.IsDevelopment())
             {
@@ -53,11 +57,14 @@ namespace PrismWear
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseStaticFiles();
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}"
             );
-           
+            app.MapControllerRoute(
+     name: "areas",
+     pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
             app.MapRazorPages();
 
             app.Run();

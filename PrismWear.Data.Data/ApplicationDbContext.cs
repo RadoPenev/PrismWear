@@ -29,6 +29,7 @@ namespace PrismWear.Data
         public DbSet<Image> Images { get; set; }
 
         public DbSet<ProductDetail> ProductDetails { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -75,6 +76,13 @@ namespace PrismWear.Data
                    .WithMany(o => o.OrderItems)
                    .HasForeignKey(oi => oi.OrderId)
                    .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<CartItem>()
+                   .HasOne(ci => ci.Product)
+                   .WithMany(p => p.CartItems)
+                   .HasForeignKey(ci => ci.ProductId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
         }
 
         private static void SetGlobalQueryFilter<T>(ModelBuilder builder) where T : class

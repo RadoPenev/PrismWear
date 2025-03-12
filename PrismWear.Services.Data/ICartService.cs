@@ -1,4 +1,5 @@
-﻿using PrismWear.Web.ViewModels.Cart;
+﻿using PrismWear.Data.Models;
+using PrismWear.Web.ViewModels.Cart;
 using PrismWear.Web.ViewModels.Sizes;
 namespace PrismWear.Services.Data
 {
@@ -9,5 +10,7 @@ namespace PrismWear.Services.Data
         Task UpdateQuantityAsync(string userId, int productId, int quantity);
         Task RemoveItemAsync(string userId, int productId);
         Task ClearCartAsync(string userId);
+
+        Task<List<CartItem>> RetrieveUserCartAsync(string userId);
     }
 }

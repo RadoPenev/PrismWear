@@ -1,1 +1,50 @@
-﻿<h1>Ei go e BROOO</h1>
+﻿@using PrismWear.Web.ViewModels.Cart
+@model CartViewModel
+
+@{
+    ViewData["Title"] = "Your Cart";
+}
+
+<div class="container my-4">
+    <h1 class="mb-4">Кошница</h1>
+
+
+    <partial name="_CartPartial" model="Model" />
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Обобщение</h5>
+                    <div class="d-flex justify-content-between">
+                        <span>Сума на продуктите:</span>
+                        <strong>@Model.Subtotal.ToString("F2") лв.</strong>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>Доставка:</span>
+                        <strong>
+                            @(Model.ShippingCost == 0
+                                ? "Безплатна"
+                                : Model.ShippingCost.ToString("F2") + " лв.")
+                        </strong>
+                    </div>
+                    <hr />
+                    <div class="d-flex justify-content-between">
+                        <span>Обща сума:</span>
+                        <strong>@Model.Total.ToString("F2") лв.</strong>
+                    </div>
+                    <hr />
+                <div class="col-md-5">
+                    <h4>Your Order</h4>
+
+                    <form asp-controller="Order" asp-action="ProcessPayment" method="get">
+                        <input type="hidden" name="totalAmount" value="@Model.Total" />
+                        <button type="submit" class="btn btn-primary w-100">
+                            Proceed to Payment
+                        </button>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -3,50 +3,54 @@ using Microsoft.EntityFrameworkCore;
 using PrismWear.Data.Common.Repositories;
 using PrismWear.Data.Models;
 using PrismWear.Web.ViewModels.Cart;
+using System.Linq;
 
 namespace PrismWear.Services.Data
 {
     public class CartService : ICartService
     {
         private readonly IDeletableEntityRepository<Cart> cartRepository;
+        private readonly IDeletableEntityRepository<CartItem> cartItemRepository;
         private readonly UserManager<IdentityUser> userManager;
 
         public CartService(IDeletableEntityRepository<Cart> cartRepository,
+            IDeletableEntityRepository<CartItem> cartItemRepository,
             UserManager<IdentityUser> userManager)
         {
             this.cartRepository = cartRepository;
+            this.cartItemRepository = cartItemRepository;
             this.userManager = userManager;
         }
-        public async Task<IEnumerable<CartItemViewModel>> GetCartItemsAsync(string userId)
-        {
-            var cart = await cartRepository.All()
-                .Where(c => c.UserId == userId)
-                .Include(c => c.CartItems)
-                    .ThenInclude(ci => ci.Product)
-                        .ThenInclude(p => p.Category)
-                .Include(c => c.CartItems)
-                    .ThenInclude(ci => ci.Product)
-                        .ThenInclude(p => p.Images)
-                .FirstOrDefaultAsync();
-
-            if (cart == null || cart.CartItems == null)
+            public async Task<IEnumerable<CartItemViewModel>> GetCartItemsAsync(string userId)
             {
-                return Enumerable.Empty<CartItemViewModel>();
+                var cart = await cartRepository.All()
+                    .Where(c => c.UserId == userId)
+                    .Include(c => c.CartItems)
+                        .ThenInclude(ci => ci.Product)
+                            .ThenInclude(p => p.Category)
+                    .Include(c => c.CartItems)
+                        .ThenInclude(ci => ci.Product)
+                            .ThenInclude(p => p.Images)
+                    .FirstOrDefaultAsync();
+
+                if (cart == null || cart.CartItems == null)
+                {
+                    return Enumerable.Empty<CartItemViewModel>();
+                }
+
+                var items = cart.CartItems.Select(ci => new CartItemViewModel
+                {
+                    ProductId = ci.ProductId,
+                    Name = ci.Product.Name,
+                    CategoryName = ci.Product.Category?.Name ?? "Unknown Category",
+                    Price = ci.Product.Price,
+                    Quantity = ci.Quantity,
+                    ImageUrl = $"/images/products/{ci.Product.Images.First().Id}.{ci.Product.Images.First().Extension}",
+                    Size=ci.Size,
+                });
+
+                return items;
             }
-
-            var items = cart.CartItems.Select(ci => new CartItemViewModel
-            {
-                ProductId = ci.ProductId,
-                Name = ci.Product.Name,
-                CategoryName = ci.Product.Category?.Name ?? "Unknown Category",
-                Price = ci.Product.Price,
-                Quantity = ci.Quantity,
-                ImageUrl = $"/images/products/{ci.Product.Images.First().Id}.{ci.Product.Images.First().Extension}",
-                Size=ci.Size,
-            });
-
-            return items;
-        }
 
 
         public async Task AddToCartAsync(string userId, int productId, string size, int quantity = 1)
@@ -113,23 +117,27 @@ namespace PrismWear.Services.Data
 
         public async Task RemoveItemAsync(string userId, int productId)
         {
-            var cart = await cartRepository.All()
+            var cart = await this.cartRepository.All()
                 .Where(c => c.UserId == userId)
                 .Include(c => c.CartItems)
                 .FirstOrDefaultAsync();
 
-            if (cart == null || cart.CartItems == null)
+            if (cart == null)
             {
                 return;
             }
 
             var existingItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+
             if (existingItem != null)
             {
-                cartRepository.Delete(existingItem.Cart);
-                await cartRepository.SaveChangesAsync();
+                this.cartItemRepository.Delete(existingItem);
+                await this.cartItemRepository.SaveChangesAsync();
+
+                cart.CartItems.Remove(existingItem);
             }
         }
+
 
         public async Task ClearCartAsync(string userId)
         {
@@ -144,5 +152,23 @@ namespace PrismWear.Services.Data
                 await cartRepository.SaveChangesAsync();
             }
         }
+
+        public async Task<List<CartItem>> RetrieveUserCartAsync(string userId)
+        {
+            var cart = await cartRepository.All()
+        .Where(c => c.UserId == userId && !c.IsDeleted)
+        .Include(c => c.CartItems)
+            .ThenInclude(ci => ci.Product)
+        .FirstOrDefaultAsync();
+
+            if (cart == null || cart.CartItems == null)
+            {
+                return new List<CartItem>();
+            }
+
+            return cart.CartItems.ToList();
+        }
+
+       
     }
 }
