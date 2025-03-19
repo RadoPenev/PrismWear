@@ -8,10 +8,13 @@ namespace PrismWear.Services.Data
     public class OrderService : IOrderService
     {
         private readonly IDeletableEntityRepository<Order> _orderRepository;
+        private readonly IDeletableEntityRepository<ProductDetail> _productDetailRepository;
 
-        public OrderService(IDeletableEntityRepository<Order> orderRepository)
+        public OrderService(IDeletableEntityRepository<Order> orderRepository,
+            IDeletableEntityRepository<ProductDetail> productDetailRepository)
         {
-            _orderRepository = orderRepository;
+            this._orderRepository = orderRepository;
+            this._productDetailRepository = productDetailRepository;
         }
 
         public async Task<int> CreateOrderAsync(string userId, OrderInputViewModel input)
@@ -114,11 +117,16 @@ namespace PrismWear.Services.Data
                 .ToListAsync();
         }
 
-        public async Task<bool> UpdateOrderAsync(EditOrderViewModel model, bool isAdmin)
+        public async Task<bool> UpdateOrderUserAsync(EditOrderViewModel model, string userId)
         {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return false;
+            }
+
             var order = await _orderRepository
                 .All()
-                .FirstOrDefaultAsync(o => o.Id == model.OrderId);
+                .FirstOrDefaultAsync(o => o.Id == model.OrderId && o.UserId == userId);
 
             if (order == null)
             {
@@ -134,16 +142,66 @@ namespace PrismWear.Services.Data
             order.ShippingZipCode = model.ShippingZipCode;
             order.ShippingCountry = model.ShippingCountry;
 
-            if (isAdmin)
-            {
-                order.OrderStatus = model.OrderStatus;
-            }
-
             _orderRepository.Update(order);
             await _orderRepository.SaveChangesAsync();
 
             return true;
         }
 
+        public async Task<bool> UpdateOrderAdminAsync(EditOrderViewModel model)
+        {
+            var order = await _orderRepository
+                .All()
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Product)
+                        .ThenInclude(p => p.ProductDetails)
+                .FirstOrDefaultAsync(o => o.Id == model.OrderId);
+
+            if (order == null)
+            {
+                return false;
+            }
+
+            var oldStatus = order.OrderStatus;
+            order.OrderStatus = model.OrderStatus;
+
+            // ✅ Deduct stock only when moving to "Shipped"
+            bool transitioningToShipped = model.OrderStatus == OrderStatus.Shipped && oldStatus != OrderStatus.Shipped;
+            if (transitioningToShipped)
+            {
+                foreach (var orderItem in order.OrderItems)
+                {
+                    var productDetail = orderItem.Product.ProductDetails
+                        .FirstOrDefault(pd => pd.Size == orderItem.Size);
+
+                    if (productDetail != null)
+                    {
+                        productDetail.Quantity -= orderItem.Quantity;
+                    }
+                }
+            }
+
+            // ✅ Delete order when status is "Completed"
+            if (model.OrderStatus == OrderStatus.Completed)
+            {
+                _orderRepository.Delete(order);
+                await _orderRepository.SaveChangesAsync();
+                return false; // Return false to indicate the order was deleted
+            }
+
+            _orderRepository.Update(order);
+            await _orderRepository.SaveChangesAsync();
+
+            return true; // Return true to indicate the order was updated
+        }
+        public async Task<IEnumerable<Order>> GetAllOrdersAsync()
+        {
+            return await _orderRepository
+                .All()
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Product)
+                .OrderByDescending(o => o.CreatedOn)
+                .ToListAsync();
+        }
     }
 }

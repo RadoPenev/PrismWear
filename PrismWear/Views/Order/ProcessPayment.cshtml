@@ -4,133 +4,252 @@
     ViewData["Title"] = "Checkout";
 }
 
-<div class="container mt-5">
+<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-lg-6 col-md-8">
-            <div class="card shadow-lg border-0 rounded-3">
-                <div class="card-body p-4">
-                    <h2 class="text-center mb-4">Checkout</h2>
+        <div class="col-lg-8 col-md-10">
+            <h1 class="display-5 fw-bold mb-4 text-center">Checkout</h1>
 
+            <!-- Progress indicator -->
+            <div class="d-flex justify-content-center mb-5">
+                <div class="position-relative checkout-progress">
+                    <div class="progress" style="height: 2px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="position-absolute top-0 start-0 translate-middle">
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <i class="bi bi-cart-check"></i>
+                        </div>
+                        <div class="mt-2 text-center"><small>Cart</small></div>
+                    </div>
+                    <div class="position-absolute top-0 start-50 translate-middle">
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <i class="bi bi-info-circle"></i>
+                        </div>
+                        <div class="mt-2 text-center"><small>Details</small></div>
+                    </div>
+                    <div class="position-absolute top-0 start-100 translate-middle">
+                        <div class="rounded-circle bg-light border d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <i class="bi bi-credit-card text-muted"></i>
+                        </div>
+                        <div class="mt-2 text-center"><small>Acceptance</small></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body p-4 p-lg-5">
                     <!-- The form posts to OrderController.ProcessPayment [HttpPost] -->
                     <form asp-controller="Order" asp-action="ProcessPayment" method="post">
                         <!-- Hidden field for UserId (Required) -->
                         <input asp-for="UserId" type="hidden" />
 
-                        <div class="row">
-                            <!-- FirstName -->
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label asp-for="FirstName" class="form-label fw-bold"></label>
-                                    <input asp-for="FirstName" class="form-control" placeholder="Enter your first name" />
-                                    <span asp-validation-for="FirstName" class="text-danger"></span>
-                                </div>
-                            </div>
+                        <!-- Customer Information Section -->
+                        <div class="mb-4">
+                            <h4 class="mb-3 d-flex align-items-center">
+                                <span class="badge bg-primary rounded-circle me-2">1</span>
+                                Customer Information
+                            </h4>
 
-                            <!-- LastName -->
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label asp-for="LastName" class="form-label fw-bold"></label>
-                                    <input asp-for="LastName" class="form-control" placeholder="Enter your last name" />
-                                    <span asp-validation-for="LastName" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
+                            <div class="card bg-light border-0 rounded-3 p-3 mb-4">
+                                <div class="row g-3">
+                                    <!-- FirstName -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="FirstName" class="form-control" id="floatingFirstName" placeholder="First Name" />
+                                            <label asp-for="FirstName" for="floatingFirstName"></label>
+                                        </div>
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    </div>
 
-                        <!-- Email -->
-                        <div class="form-group mb-3">
-                            <label asp-for="Email" class="form-label fw-bold"></label>
-                            <input asp-for="Email" class="form-control" type="email" placeholder="Enter your email" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
-                        </div>
+                                    <!-- LastName -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="LastName" class="form-control" id="floatingLastName" placeholder="Last Name" />
+                                            <label asp-for="LastName" for="floatingLastName"></label>
+                                        </div>
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
 
-                        <!-- Shipping Info -->
-                        <h5 class="mt-4">Shipping Information</h5>
-                        <hr />
-
-                        <!-- Address -->
-                        <div class="form-group mb-3">
-                            <label asp-for="ShippingAddressLine1" class="form-label fw-bold"></label>
-                            <input asp-for="ShippingAddressLine1" class="form-control" placeholder="Street address" />
-                            <span asp-validation-for="ShippingAddressLine1" class="text-danger"></span>
-                        </div>
-
-                        <div class="row">
-                            <!-- City -->
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label asp-for="ShippingCity" class="form-label fw-bold"></label>
-                                    <input asp-for="ShippingCity" class="form-control" placeholder="City" />
-                                    <span asp-validation-for="ShippingCity" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <!-- State -->
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label asp-for="ShippingState" class="form-label fw-bold"></label>
-                                    <input asp-for="ShippingState" class="form-control" placeholder="State/Province" />
-                                    <span asp-validation-for="ShippingState" class="text-danger"></span>
+                                    <!-- Email -->
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input asp-for="Email" class="form-control" type="email" id="floatingEmail" placeholder="Email" />
+                                            <label asp-for="Email" for="floatingEmail"></label>
+                                        </div>
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <!-- Zip -->
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label asp-for="ShippingZipCode" class="form-label fw-bold"></label>
-                                    <input asp-for="ShippingZipCode" class="form-control" placeholder="ZIP Code" />
-                                    <span asp-validation-for="ShippingZipCode" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <!-- Country -->
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label asp-for="ShippingCountry" class="form-label fw-bold"></label>
-                                    <input asp-for="ShippingCountry" class="form-control" placeholder="Country" />
-                                    <span asp-validation-for="ShippingCountry" class="text-danger"></span>
+                        <!-- Shipping Information Section -->
+                        <div class="mb-4">
+                            <h4 class="mb-3 d-flex align-items-center">
+                                <span class="badge bg-primary rounded-circle me-2">2</span>
+                                Shipping Information
+                            </h4>
+
+                            <div class="card bg-light border-0 rounded-3 p-3 mb-4">
+                                <div class="row g-3">
+                                    <!-- Address -->
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input asp-for="ShippingAddressLine1" class="form-control" id="floatingAddress" placeholder="Address" />
+                                            <label asp-for="ShippingAddressLine1" for="floatingAddress"></label>
+                                        </div>
+                                        <span asp-validation-for="ShippingAddressLine1" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- City and State -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="ShippingCity" class="form-control" id="floatingCity" placeholder="City" />
+                                            <label asp-for="ShippingCity" for="floatingCity"></label>
+                                        </div>
+                                        <span asp-validation-for="ShippingCity" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="ShippingState" class="form-control" id="floatingState" placeholder="State/Province" />
+                                            <label asp-for="ShippingState" for="floatingState"></label>
+                                        </div>
+                                        <span asp-validation-for="ShippingState" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- Zip and Country -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="ShippingZipCode" class="form-control" id="floatingZip" placeholder="ZIP Code" />
+                                            <label asp-for="ShippingZipCode" for="floatingZip"></label>
+                                        </div>
+                                        <span asp-validation-for="ShippingZipCode" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="ShippingCountry" class="form-control" id="floatingCountry" placeholder="Country" />
+                                            <label asp-for="ShippingCountry" for="floatingCountry"></label>
+                                        </div>
+                                        <span asp-validation-for="ShippingCountry" class="text-danger"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Payment / Order Summary -->
-                        <h5 class="mt-4">Payment Details</h5>
-                        <hr />
+                        <!-- Order Summary Section -->
+                        <div class="mb-4">
+                            <h4 class="mb-3 d-flex align-items-center">
+                                <span class="badge bg-primary rounded-circle me-2">3</span>
+                                Order Summary
+                            </h4>
 
-                        <div class="form-group mb-3">
-                            <!-- Safely handle null or empty CartItems -->
-                            @if (Model.CartItems != null && Model.CartItems.Any())
-                            {
-                                <strong>
-                                    @Model.CartItems.Sum(x => x.Product.Price * x.Quantity).ToString("C")
-                                </strong>
-                            }
-                            else
-                            {
-                                <strong>0.00 лв.</strong>
-                            }
+                            <div class="card bg-light border-0 rounded-3 p-3 mb-4">
+                                @if (Model.CartItems != null && Model.CartItems.Any())
+                                {
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Product</th>
+                                                    <th class="text-center">Qty</th>
+                                                    <th class="text-end">Price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.CartItems)
+                                                {
+                                                   <tr>
+                                                        <td class="text-center align-middle">@item.Product.Name</td>
+                                                        <td class="text-center align-middle">@item.Quantity</td>
+                                                        <td class="text-end align-middle">@((item.Product.Price * item.Quantity).ToString("F2")) лв.</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                            <tfoot class="table-light">
+                                                <tr>
+                                                    <th colspan="2" class="text-end">Subtotal:</th>
+                                                    <th class="text-end">@Model.CartItems.Sum(x => x.Product.Price * x.Quantity).ToString("F2") лв.</th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="2" class="text-end">Shipping:</th>
+                                                    <th class="text-end">0.00 лв.</th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="2" class="text-end">Total:</th>
+                                                    <th class="text-end text-primary fs-5">@Model.CartItems.Sum(x => x.Product.Price * x.Quantity).ToString("F2") лв.</th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="alert alert-warning">
+                                        <i class="bi bi-exclamation-triangle me-2"></i>Your cart is empty. Please add items to your cart before checkout.
+                                    </div>
+                                    <div class="text-center mb-3">
+                                        <a href="/" class="btn btn-primary">Continue Shopping</a>
+                                    </div>
+                                }
+                            </div>
                         </div>
 
                         <!-- Hidden field for OrderId if needed -->
                         <input asp-for="OrderId" type="hidden" />
 
-                        <div class="d-grid mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                Proceed to Payment
-                            </button>
+                        <div class="row g-3 mt-4">
+                            <div class="col-md-6">
+                                <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-secondary w-100">
+                                    <i class="bi bi-arrow-left me-2"></i>Back to Cart
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-primary w-100 py-3" @(Model.CartItems == null || !Model.CartItems.Any() ? "disabled" : "")>
+                                    <i class="bi bi-credit-card me-2"></i>Place Order
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>
-            <p class="text-center text-muted mt-3">
-                <small>Secure Checkout &bullet; 100% Privacy Protection</small>
-            </p>
+
+            <div class="mt-4 text-center">
+                <div class="d-flex justify-content-center gap-3 mb-3">
+                    <i class="bi bi-shield-check fs-4 text-success"></i>
+                    <i class="bi bi-credit-card fs-4 text-primary"></i>
+                    <i class="bi bi-lock fs-4 text-secondary"></i>
+                </div>
+                <p class="text-muted mb-0"><small>Secure Checkout • 100% Privacy Protection • SSL Encrypted</small></p>
+            </div>
         </div>
     </div>
 </div>
+
+<style>
+    .checkout-progress {
+        width: 240px;
+        height: 2px;
+        margin-top: 20px;
+    }
+
+    .form-floating > .form-control:focus,
+    .form-floating > .form-control:not(:placeholder-shown) {
+        padding-top: 1.625rem;
+        padding-bottom: 0.625rem;
+    }
+
+        .form-floating > .form-control:focus ~ label,
+        .form-floating > .form-control:not(:placeholder-shown) ~ label {
+            opacity: 0.65;
+            transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+        }
+</style>
 
 <!-- Make sure you have client-side validation scripts if using them -->
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">

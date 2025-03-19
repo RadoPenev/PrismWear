@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PrismWear.Data.Common.Repositories;
+using PrismWear.Data.Models;
 using PrismWear.Services.Data;
 using PrismWear.Web.ViewModels.Orders;
+using Stripe.Climate;
 using System.Security.Claims;
 
 namespace PrismWear.Controllers
@@ -9,13 +14,18 @@ namespace PrismWear.Controllers
     {
         private readonly IOrderService _orderService;
         private readonly ICartService _cartService;
+        private readonly IDeletableEntityRepository<ProductDetail> _productDetailRepository;
 
         public OrderController(IOrderService orderService,
-            ICartService cartService)
+            ICartService cartService,
+            IDeletableEntityRepository<ProductDetail> productDetailRepository)
         {
             _orderService = orderService;
             this._cartService = cartService;
+            this._productDetailRepository = productDetailRepository;
         }
+
+
         [HttpGet]
         public async Task<IActionResult> ProcessPayment()
         {
@@ -31,25 +41,42 @@ namespace PrismWear.Controllers
             };
             model.TotalAmount = cartItems.Sum(ci => ci.Product.Price * ci.Quantity);
 
-            return View(model);
+            return View(model); // ✅ Don't clear cart here!
         }
 
         [HttpPost]
         public async Task<IActionResult> ProcessPayment(OrderInputViewModel model)
         {
-            model.CartItems = await _cartService.RetrieveUserCartAsync(model.UserId);
-            model.TotalAmount = model.CartItems.Sum(ci => ci.Product.Price * ci.Quantity);
+            var cartItems = await _cartService.RetrieveUserCartAsync(model.UserId); // ✅ Get cart items once
+            model.CartItems = cartItems;
+            model.TotalAmount = cartItems.Sum(ci => ci.Product.Price * ci.Quantity);
 
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
+            // ✅ Check if stock is sufficient before creating an order
+            foreach (var cartItem in cartItems) // ✅ Use retrieved cartItems instead of model.CartItems
+            {
+                var productDetail = await _productDetailRepository
+                    .All()
+                    .FirstOrDefaultAsync(pd => pd.ProductId == cartItem.ProductId && pd.Size == cartItem.Size);
+
+                if (productDetail == null || productDetail.Quantity < cartItem.Quantity)
+                {
+                    TempData["error"] = "Недостатъчна наличност от този размер";
+                    return View(model);
+                }
+            }
+
             var orderId = await _orderService.CreateOrderAsync(model.UserId, model);
+
+            // ✅ Clear the cart only after successful order placement
+            await _cartService.ClearCartAsync(model.UserId);
 
             return RedirectToAction("Details", new { orderId });
         }
-
         [HttpGet]
         public async Task<IActionResult> Details(int orderId)
         {
@@ -72,7 +99,6 @@ namespace PrismWear.Controllers
             }
 
             var orders = await _orderService.GetAllOrdersForUserAsync(userId);
-
             return View(orders);
         }
 
@@ -96,12 +122,11 @@ namespace PrismWear.Controllers
                 ShippingState = order.ShippingState,
                 ShippingZipCode = order.ShippingZipCode,
                 ShippingCountry = order.ShippingCountry,
-                OrderStatus = order.OrderStatus 
+                OrderStatus = order.OrderStatus
             };
 
             return View(model);
         }
-
         [HttpPost]
         public async Task<IActionResult> Edit(EditOrderViewModel model)
         {
@@ -110,15 +135,55 @@ namespace PrismWear.Controllers
                 return View(model);
             }
 
-            bool isAdmin = User.IsInRole("Admin");
+            bool updated = await _orderService.UpdateOrderAdminAsync(model);
 
-            bool updated = await _orderService.UpdateOrderAsync(model, isAdmin);
             if (!updated)
+            {
+                // ✅ Redirect to the admin order list if the order was deleted
+                return RedirectToAction("MyOrders");
+            }
+
+            return RedirectToAction("AdminDetails", new { orderId = model.OrderId });
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> UserOrderDetails(int orderId)
+        {
+            var order = await _orderService.GetOrderByIdAsync(orderId);
+            if (order == null)
             {
                 return NotFound();
             }
 
-            return RedirectToAction("Details", new { orderId = model.OrderId });
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (order.UserId != userId)
+            {
+                return Forbid();
+            }
+
+            return View(order);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AdminDetails(int orderId)
+        {
+            var order = await _orderService.GetOrderByIdAsync(orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+           
+            return View("Details", order);
+        }
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AllOrders()
+        {
+            var orders = await _orderService.GetAllOrdersAsync();
+            return View("AllOrders", orders); // ✅ Use the new "AllOrders" view
         }
     }
 }

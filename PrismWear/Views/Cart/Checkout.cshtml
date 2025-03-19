@@ -1,50 +1,287 @@
 ﻿@using PrismWear.Web.ViewModels.Cart
 @model CartViewModel
-
 @{
-    ViewData["Title"] = "Your Cart";
+    ViewData["Title"] = "Вашата кошница";
 }
 
-<div class="container my-4">
-    <h1 class="mb-4">Кошница</h1>
+<style>
+    /* Cart Page Styling */
+    .page-heading {
+        position: relative;
+        margin-bottom: 2rem;
+        font-weight: 700;
+        text-align: center;
+        padding-bottom: 0.5rem;
+        color: var(--text-dark);
+    }
 
+        .page-heading::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+        }
 
-    <partial name="_CartPartial" model="Model" />
+    .cart-container {
+        margin-bottom: 3rem;
+    }
 
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">Обобщение</h5>
-                    <div class="d-flex justify-content-between">
-                        <span>Сума на продуктите:</span>
-                        <strong>@Model.Subtotal.ToString("F2") лв.</strong>
+    .cart-items-container {
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.95);
+        border: none;
+    }
+
+    .summary-card {
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.95);
+        border: none;
+        position: sticky;
+        top: 20px;
+    }
+
+    .summary-title {
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid rgba(0,0,0,0.05);
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        font-size: 1rem;
+    }
+
+    .summary-total {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--accent-color);
+        padding-top: 1rem;
+        border-top: 2px solid rgba(0,0,0,0.05);
+    }
+
+    .summary-label {
+        color: var(--text-dark);
+    }
+
+    .summary-value {
+        font-weight: 600;
+    }
+
+    .free-shipping {
+        color: #28a745;
+        font-weight: 600;
+    }
+
+    .checkout-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(92, 107, 192, 0.3);
+        margin-top: 1.5rem;
+        width: 100%;
+    }
+
+        .checkout-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(92, 107, 192, 0.4);
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+        }
+
+        .checkout-btn:active {
+            transform: translateY(-1px);
+        }
+
+    .continue-shopping {
+        display: block;
+        text-align: center;
+        margin-top: 1.5rem;
+        color: var(--text-dark);
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+        .continue-shopping:hover {
+            color: var(--primary-color);
+            transform: translateX(-5px);
+        }
+
+        .continue-shopping i {
+            margin-right: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .continue-shopping:hover i {
+            transform: translateX(-5px);
+        }
+
+    .empty-cart {
+        text-align: center;
+        padding: 3rem 2rem;
+    }
+
+    .empty-cart-icon {
+        font-size: 5rem;
+        color: var(--secondary-color);
+        opacity: 0.5;
+        margin-bottom: 1.5rem;
+    }
+
+    .empty-cart-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 1rem;
+    }
+
+    .empty-cart-text {
+        color: #6c757d;
+        margin-bottom: 2rem;
+    }
+
+    .shop-now-btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.8rem 2rem;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+        .shop-now-btn:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+    @@media (max-width: 991.98px) {
+        .summary-card
+
+    {
+        margin-top: 2rem;
+        position: static;
+    }
+
+    }</style>
+
+<h1 class="page-heading animate__animated animate__fadeIn mt-4">Вашата кошница</h1>
+
+<div class="container cart-container">
+    <div class="row g-4">
+        <!-- Cart Items Column -->
+        <div class="col-lg-8 animate__animated animate__fadeIn">
+            <div class="cart-items-container">
+                @if (Model.Items.Any())
+                {
+                    <partial name="_CartPartial" model="Model" />
+                }
+                else
+                {
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <h2 class="empty-cart-title">Вашата кошница е празна</h2>
+                        <p class="empty-cart-text">Изглежда все още не сте добавили продукти в кошницата си.</p>
+                        <a href="/Products/All" class="btn shop-now-btn">
+                            <i class="fas fa-shopping-bag"></i>
+                            Пазарувай сега
+                        </a>
                     </div>
-                    <div class="d-flex justify-content-between">
-                        <span>Доставка:</span>
-                        <strong>
-                            @(Model.ShippingCost == 0
-                                ? "Безплатна"
-                                : Model.ShippingCost.ToString("F2") + " лв.")
-                        </strong>
-                    </div>
-                    <hr />
-                    <div class="d-flex justify-content-between">
-                        <span>Обща сума:</span>
-                        <strong>@Model.Total.ToString("F2") лв.</strong>
-                    </div>
-                    <hr />
-                <div class="col-md-5">
-                    <h4>Your Order</h4>
+                }
+            </div>
+        </div>
 
+        <!-- Order Summary Column -->
+        <div class="col-lg-4 animate__animated animate__fadeIn animate__delay-1s">
+            <div class="summary-card p-4">
+                <h5 class="summary-title">Обобщение на поръчката</h5>
+
+                <div class="summary-row">
+                    <span class="summary-label">Сума на продуктите:</span>
+                    <span class="summary-value">@Model.Subtotal.ToString("F2") лв.</span>
+                </div>
+
+                <div class="summary-row">
+                    <span class="summary-label">Доставка:</span>
+                    <span class="summary-value">
+                        @if (Model.ShippingCost == 0)
+                        {
+                            <span class="free-shipping">Безплатна</span>
+                        }
+                        else
+                        {
+                            @(Model.ShippingCost.ToString("F2") + " лв.")
+                        }
+                    </span>
+                </div>
+
+                <div class="summary-row summary-total">
+                    <span class="summary-label">Обща сума:</span>
+                    <span class="summary-value">@Model.Total.ToString("F2") лв.</span>
+                </div>
+
+                @if (Model.Items.Any())
+                {
                     <form asp-controller="Order" asp-action="ProcessPayment" method="get">
                         <input type="hidden" name="totalAmount" value="@Model.Total" />
-                        <button type="submit" class="btn btn-primary w-100">
-                            Proceed to Payment
+                        <button type="submit" class="checkout-btn">
+                            <i class="fas fa-credit-card"></i>
+                            Продължи към плащане
                         </button>
                     </form>
-                </div>
-                </div>
+
+                    <a href="/Products/All" class="continue-shopping">
+                        <i class="fas fa-arrow-left"></i>
+                        Продължи пазаруването
+                    </a>
+                }
+                else
+                {
+                    <a href="/Products/All" class="checkout-btn">
+                        <i class="fas fa-shopping-bag"></i>
+                        Разгледай продукти
+                    </a>
+                }
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Handle quantity changes if needed
+            $('.quantity-btn').on('click', function() {
+                // Your quantity update code here
+            });
+        });
+    </script>
+}

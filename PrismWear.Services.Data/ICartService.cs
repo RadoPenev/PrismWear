@@ -12,5 +12,7 @@ namespace PrismWear.Services.Data
         Task ClearCartAsync(string userId);
 
         Task<List<CartItem>> RetrieveUserCartAsync(string userId);
+
+     
     }
 }

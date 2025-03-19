@@ -15,6 +15,9 @@ namespace PrismWear.Services.Data
 
         Task<IEnumerable<Order>> GetAllOrdersForUserAsync(string userId);
 
-        Task<bool> UpdateOrderAsync(EditOrderViewModel model, bool isAdmin);
+        Task<bool> UpdateOrderUserAsync(EditOrderViewModel model, string userId);
+        Task<bool> UpdateOrderAdminAsync(EditOrderViewModel model);
+
+        Task<IEnumerable<Order>> GetAllOrdersAsync();
     }
 }

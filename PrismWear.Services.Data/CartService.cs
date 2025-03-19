@@ -141,15 +141,18 @@ namespace PrismWear.Services.Data
 
         public async Task ClearCartAsync(string userId)
         {
-            var cart = await cartRepository.All()
-                .Where(c => c.UserId == userId)
+            var cart = await cartRepository
+                .All()
                 .Include(c => c.CartItems)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(c => c.UserId == userId);
 
-            if (cart != null)
+            if (cart != null && cart.CartItems.Any())
             {
-                cart.CartItems.Clear();
-                await cartRepository.SaveChangesAsync();
+                foreach (var item in cart.CartItems.ToList())
+                {
+                    cartItemRepository.Delete(item);
+                }
+                await cartItemRepository.SaveChangesAsync();
             }
         }
 
@@ -169,6 +172,6 @@ namespace PrismWear.Services.Data
             return cart.CartItems.ToList();
         }
 
-       
+
     }
 }

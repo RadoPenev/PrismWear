@@ -11,8 +11,6 @@
     <form asp-action="Edit" method="post">
         <input asp-for="OrderId" type="hidden" />
 
-        <!-- Shipping fields (everyone can see/update) -->
-
         <div class="mb-3">
             <label asp-for="FirstName"></label>
             <input asp-for="FirstName" class="form-control" />
@@ -31,7 +29,36 @@
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
 
-        <!-- etc. for shipping fields -->
+        <div class="mb-3">
+            <label asp-for="ShippingAddressLine1"></label>
+            <input asp-for="ShippingAddressLine1" class="form-control" />
+            <span asp-validation-for="ShippingAddressLine1" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ShippingCity"></label>
+            <input asp-for="ShippingCity" class="form-control" />
+            <span asp-validation-for="ShippingCity" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ShippingState"></label>
+            <input asp-for="ShippingState" class="form-control" />
+            <span asp-validation-for="ShippingState" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ShippingZipCode"></label>
+            <input asp-for="ShippingZipCode" class="form-control" />
+            <span asp-validation-for="ShippingZipCode" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ShippingCountry"></label>
+            <input asp-for="ShippingCountry" class="form-control" />
+            <span asp-validation-for="ShippingCountry" class="text-danger"></span>
+        </div>
+
         @if (User.IsInRole("Admin"))
         {
             <div class="mb-3">
@@ -42,6 +69,13 @@
                     <option value="Completed">Completed</option>
                 </select>
                 <span asp-validation-for="OrderStatus" class="text-danger"></span>
+            </div>
+        }
+        else
+        {
+            <div class="mb-3">
+                <label>Order Status</label>
+                <input value="@Model.OrderStatus" class="form-control" readonly />
             </div>
         }
 

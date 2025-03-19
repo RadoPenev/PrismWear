@@ -1,148 +1,358 @@
-﻿@using PrismWear.Web.ViewModels.Products
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@using PrismWear.Web.ViewModels.Products
 @model EditProductInputModel
 @{
-    ViewData["Title"] = "Add New Product";
+    ViewData["Title"] = "Редактиране на продукт";
     var categoriesItems = Model.CategoriesItems.Select(x => new SelectListItem(x.Value, x.Key));
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>Edit Product</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
+<style>
+    /* Product Form Styling */
+    .page-heading {
+        position: relative;
+        margin-bottom: 2.5rem;
+        font-weight: 700;
+        text-align: center;
+        padding-bottom: 0.5rem;
+        color: var(--text-dark);
+    }
+
+        .page-heading::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
         }
 
-        .edit-container {
-            max-width: 600px;
-            margin: 40px auto;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-            padding: 30px;
+    .form-container {
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.95);
+        border: none;
+        margin-bottom: 2rem;
+    }
+
+    .form-section {
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
         }
 
-            .edit-container h1 {
-                text-align: center;
-                margin-top: 0;
-                margin-bottom: 20px;
-                font-size: 1.8em;
-            }
+    .section-title {
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
 
-        .form-group {
-            margin-bottom: 20px;
+    .form-label {
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .form-control, .form-select {
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        border: 1px solid rgba(0,0,0,0.1);
+        transition: all 0.3s;
+        background-color: rgba(255, 255, 255, 0.9);
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(92, 107, 192, 0.25);
         }
 
-            .form-group label {
-                display: block;
-                font-weight: bold;
-                margin-bottom: 5px;
-            }
+    textarea.form-control {
+        min-height: 120px;
+    }
 
-            .form-group input[type="text"],
-            .form-group input[type="number"],
-            .form-group textarea,
-            .form-group select {
-                width: 100%;
-                padding: 8px 10px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                font-size: 1em;
-            }
+    .submit-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        border: none;
+        padding: 0.8rem 2.5rem;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(92, 107, 192, 0.3);
+    }
 
-            .form-group textarea {
-                resize: vertical;
-            }
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(92, 107, 192, 0.4);
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+        }
 
-        .submit-btn {
-            display: block;
-            width: 100%;
-            padding: 12px 16px;
-            background-color: #333;
-            color: #ffffff;
-            text-transform: uppercase;
+    .cancel-btn {
+        background: transparent;
+        color: var(--text-dark);
+        border: 2px solid rgba(0,0,0,0.1);
+        padding: 0.8rem 2.5rem;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        margin-right: 1rem;
+    }
+
+        .cancel-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: var(--text-dark);
+        }
+
+    .validation-summary {
+        background-color: rgba(220, 53, 69, 0.1);
+        border-left: 4px solid #dc3545;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+        .validation-summary ul {
+            margin-bottom: 0;
+            padding-left: 1.5rem;
+        }
+
+    /* Size table styling */
+    .sizes-table {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+        .sizes-table thead {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .sizes-table th {
+            padding: 1rem;
+            font-weight: 600;
             border: none;
-            border-radius: 4px;
-            cursor: pointer;
         }
 
-            .submit-btn:hover {
-                background-color: #444;
+        .sizes-table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+            .sizes-table tbody tr:nth-child(odd) {
+                background-color: rgba(0,0,0,0.02);
             }
 
-        .text-danger {
-            color: red;
-            font-size: 0.9em;
+            .sizes-table tbody tr:hover {
+                background-color: rgba(92, 107, 192, 0.05);
+            }
+
+        .sizes-table td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-top: 1px solid rgba(0,0,0,0.05);
         }
-    </style>
-</head>
-<body>
-    <div class="edit-container">
-        <h1>Edit Product</h1>
 
-        <form asp-action="Edit" asp-controller="Products" asp-route-id="@Model.Id" method="post">
-            <input type="hidden" asp-for="Id" />
+    .size-name {
+        font-weight: 600;
+        color: var(--text-dark);
+        background-color: rgba(92, 107, 192, 0.1);
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        display: inline-block;
+    }
 
-            <div class="form-group">
-                <label asp-for="Name"></label>
-                <input asp-for="Name" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+    /* Responsive adjustments */
+    @@media (max-width: 767.98px) {
+        .form-container
+
+    {
+        padding: 1.5rem;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .submit-btn, .cancel-btn {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+
+    .sizes-table thead {
+        display: none;
+    }
+
+    .sizes-table,
+    .sizes-table tbody,
+    .sizes-table tr,
+    .sizes-table td {
+        display: block;
+        width: 100%;
+    }
+
+        .sizes-table tr {
+            margin-bottom: 1rem;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .sizes-table td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: right;
+            padding: 0.75rem 1rem;
+        }
+
+            .sizes-table td:before {
+                content: attr(data-label);
+                font-weight: 600;
+                text-align: left;
+            }
+
+        .sizes-table input.form-control {
+            width: 120px;
+        }
+
+    }
+</style>
+
+<h1 class="page-heading animate__animated animate__fadeIn mt-4">@ViewData["Title"]</h1>
+
+<div class="container">
+    <form asp-action="Edit" asp-controller="Products" asp-route-id="@Model.Id" method="post" class="form-container p-4 animate__animated animate__fadeInUp">
+        <input type="hidden" asp-for="Id" />
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div asp-validation-summary="All" class="validation-summary"></div>
+        }
+
+        <div class="form-section">
+            <h2 class="section-title">
+                <i class="fas fa-info-circle"></i>
+                Основна информация
+            </h2>
+
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <label asp-for="Name" class="form-label">
+                        <i class="fas fa-tag"></i>
+                        Име на продукта
+                    </label>
+                    <input asp-for="Name" class="form-control" placeholder="Въведете име на продукта" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="Price" class="form-label">
+                        <i class="fas fa-dollar-sign"></i>
+                        Цена
+                    </label>
+                    <div class="input-group">
+                        <input asp-for="Price" type="number" step="0.01" class="form-control" placeholder="0.00" />
+                        <span class="input-group-text">лв.</span>
+                    </div>
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Description"></label>
-                <textarea asp-for="Description"></textarea>
+            <div class="mb-4">
+                <label asp-for="Description" class="form-label">
+                    <i class="fas fa-align-left"></i>
+                    Описание
+                </label>
+                <textarea asp-for="Description" class="form-control" rows="4" placeholder="Въведете описание на продукта"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
-            <h5>Sizes & Quantities</h5>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Size</th>
-                        <th>Quantity</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int i = 0; i < Model.Sizes.Count(); i++)
-                    {
-                        <tr>
-                            <td>
-                                @Model.Sizes[i].Size
-                                <input asp-for="@Model.Sizes[i].Size" type="hidden" />
-                            </td>
-                            <td>
-                                <input asp-for="@Model.Sizes[i].Quantity" class="form-control" />
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-
-            <div class="form-group">
-                <label asp-for="CategoryId" class="form-label fw-bold"></label>
-                <select asp-for="CategoryId" class="form-select" asp-items="categoriesItems">
-                    <option value="">-- Select Category --</option>
+            <div class="mb-3">
+                <label asp-for="CategoryId" class="form-label">
+                    <i class="fas fa-folder"></i>
+                    Категория
+                </label>
+                <select asp-for="CategoryId" asp-items="categoriesItems" class="form-select">
+                    <option value="">-- Изберете категория --</option>
                 </select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Price"></label>
-                <input asp-for="Price" step="0.01" />
-                <span asp-validation-for="Price" class="text-danger"></span>
+        <div class="form-section">
+            <h2 class="section-title">
+                <i class="fas fa-ruler"></i>
+                Размери и количества
+            </h2>
+
+            <div class="sizes-table-container">
+                <table class="table sizes-table">
+                    <thead>
+                        <tr>
+                            <th>Размер</th>
+                            <th>Количество</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Sizes.Count(); i++)
+                        {
+                            <tr>
+                                <td data-label="Размер">
+                                    <span class="size-name">@Model.Sizes[i].Size</span>
+                                    <input asp-for="@Model.Sizes[i].Size" type="hidden" />
+                                </td>
+                                <td data-label="Количество">
+                                    <input asp-for="@Model.Sizes[i].Quantity" class="form-control" type="number" min="0" />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
-            <button type="submit" class="submit-btn">Save Changes</button>
-        </form>
-    </div>
+        </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
-</body>
-</html>
+        <div class="text-center mt-4 d-flex justify-content-center button-group">
+            <a asp-controller="Products" asp-action="All" class="btn cancel-btn">
+                <i class="fas fa-times me-2"></i>
+                Отказ
+            </a>
+            <button type="submit" class="btn submit-btn">
+                <i class="fas fa-save me-2"></i>
+                Запази промените
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function() {
+            // Animation for form sections
+            $('.form-section').each(function(index) {
+                $(this).addClass('animate__animated animate__fadeIn');
+                $(this).css('animation-delay', (index * 0.1) + 's');
+            });
+        });
+    </script>
+}

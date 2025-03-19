@@ -6,15 +6,297 @@
     <title>@ViewData["Title"] - PrismWear</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PrismWear.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" asp-append-version="true" />
+    <style>
+        :root {
+            --primary-color: #5c6bc0;
+            --secondary-color: #7986cb;
+            --accent-color: #3949ab;
+            --text-light: #f8f9fa;
+            --text-dark: #343a40;
+            --transition-speed: 0.3s;
+        }
+
+        html {
+            position: relative;
+            min-height: 100%;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #eaecf4 100%);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' x2='0' y1='0' y2='1'%3E%3Cstop offset='0' stop-color='%23f8f9fa'/%3E%3Cstop offset='1' stop-color='%23e6e9f0'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='0' x2='1' y1='0' y2='0'%3E%3Cstop offset='0' stop-color='%23eaecf4' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%235c6bc0' stop-opacity='.1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpattern id='c' width='250' height='250' patternUnits='userSpaceOnUse'%3E%3Cg fill='%23f8f9fa'%3E%3Cpolygon fill-opacity='.1' points='0,125 0,0 125,0'/%3E%3Cpolygon fill-opacity='.1' points='250,125 250,250 125,250'/%3E%3C/g%3E%3Crect width='100%25' height='100%25' fill='url(%23a)'/%3E%3Crect width='100%25' height='100%25' fill='url(%23b)'/%3E%3C/pattern%3E%3Crect width='100%25' height='100%25' fill='url(%23c)'/%3E%3C/svg%3E");
+            background-attachment: fixed;
+            background-size: cover;
+            color: var(--text-dark);
+            transition: background-color 0.5s ease;
+            /* Margin bottom by footer height */
+            margin-bottom: 60px;
+            min-height: 100vh;
+        }
+
+        .content-wrapper {
+            width: 100%;
+            animation: fadeIn 0.8s ease-in-out;
+            padding-bottom: 70px; /* Ensure there's space for the footer */
+        }
+
+        main {
+            min-height: calc(100vh - 180px); /* viewport height minus header and footer */
+        }
+
+        .custom-footer {
+            position: absolute;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--text-light) !important;
+            padding: 1rem 0;
+            width: 100%;
+            height: 60px; /* Set the fixed height of the footer */
+        }
+
+            .custom-footer a {
+                color: var(--text-light) !important;
+                text-decoration: none;
+                transition: all var(--transition-speed);
+            }
+
+                .custom-footer a:hover {
+                    text-decoration: underline;
+                    opacity: 0.9;
+                }
+
+        /* Enhanced Navbar */
+        .custom-navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+            padding: 0.8rem 1rem;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .navbar-brand {
+            color: var(--text-light) !important;
+            font-weight: 700;
+            font-size: 1.4rem;
+            letter-spacing: 0.5px;
+            transition: transform var(--transition-speed);
+        }
+
+            .navbar-brand:hover {
+                transform: translateY(-2px);
+            }
+
+        .nav-link {
+            color: var(--text-light) !important;
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 1rem;
+            margin: 0 0.2rem;
+            transition: all var(--transition-speed);
+        }
+
+            .nav-link::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background-color: var(--text-light);
+                transition: width var(--transition-speed);
+            }
+
+            .nav-link:hover::after {
+                width: 100%;
+            }
+
+        .navbar-toggler {
+            border: none;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+            .navbar-toggler:focus {
+                box-shadow: none;
+            }
+
+        /* Cart Icon Animation */
+        .cart-icon {
+            position: relative;
+            transition: all var(--transition-speed);
+        }
+
+            .cart-icon:hover {
+                transform: scale(1.2);
+                color: #fff;
+            }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ff5252;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Product Cards Styling */
+        .product-card {
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 1.5rem;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+            .product-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            }
+
+        .product-img-container {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-img {
+            transition: transform 0.5s ease;
+            width: 100%;
+            height: auto;
+        }
+
+        .product-card:hover .product-img {
+            transform: scale(1.05);
+        }
+
+        .product-title {
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .product-card:hover .product-title {
+            color: var(--primary-color);
+        }
+
+        .product-price {
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+            .btn-primary:hover {
+                background-color: var(--accent-color);
+                border-color: var(--accent-color);
+                transform: translateY(-2px);
+            }
+
+        /* Animations */
+        @@keyframes fadeIn {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        @@keyframes pulse {
+            0%
+
+        {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+
+        }
+
+        /* Page transitions */
+        .page-enter {
+            opacity: 0;
+        }
+
+        .page-enter-active {
+            opacity: 1;
+            transition: opacity 500ms;
+        }
+
+        /* Form styling */
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(92, 107, 192, 0.25);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        /* Category badges */
+        .category-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+            .category-badge:hover {
+                background-color: var(--accent-color);
+                transform: scale(1.05);
+            }
+
+        /* Responsive fixes */
+        @@media (max-width: 768px) {
+            .navbar-collapse
+
+        {
+            background-color: var(--primary-color);
+            padding: 1rem;
+            border-radius: 0 0 5px 5px;
+        }
+
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-dark shadow-sm custom-navbar">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PrismWear</a>
+                <a class="navbar-brand animate__animated animate__fadeIn" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-tshirt me-2"></i>PrismWear
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -22,34 +304,34 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="All">All Products</a>
+                            <a class="nav-link" asp-area="" asp-controller="Products" asp-action="All">
+                                <i class="fas fa-store me-1"></i>All Products
+                            </a>
                         </li>
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin Dashboard</a>
+                                <a class="nav-link" asp-area="" asp-controller="Categories" asp-action="All">
+                                    <i class="fas fa-tags me-1"></i>All Categories
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="All">All Categories</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Create">Create Product</a>
+                                <a class="nav-link" asp-area="" asp-controller="Products" asp-action="Create">
+                                    <i class="fas fa-plus-circle me-1"></i>Create Product
+                                </a>
                             </li>
                         }
-                       
-                       
                     </ul>
                     <ul class="navbar-nav">
-                    <li class="nav-item">
-                        @if (User.Identity.IsAuthenticated)
+                        <li class="nav-item">
+                            @if (User.Identity.IsAuthenticated)
                             {
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
-                                        <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l.5 2H5V5zM6 5v2h2V5zm3 0v2h2V5zm3 0v2h1.36l.5-2zm1.11 3H12v2h.61zM11 8H9v2h2zM8 8H6v2h2zM5 8H3.89l.5 2H5zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0" />
-                                    </svg>
+                                <a class="nav-link cart-icon" asp-area="" asp-controller="Cart" asp-action="Index">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <span class="cart-badge" id="cartCount">0</span>
                                 </a>
                             }
-                    </li>
+                        </li>
                     </ul>
                     <partial name="_MyOrdersNavItem" />
                     <partial name="_LoginPartial" />
@@ -58,20 +340,54 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+
+    <div class="container content-wrapper">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - PrismWear - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="footer custom-footer py-3">
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-12">
+                    <p class="m-0">&copy; 2025 - PrismWear - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></p>
+                </div>
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        // Initialize animations
+        new WOW().init();
+
+        // Simulate cart count (you'll need to replace this with your actual cart implementation)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Replace with your actual cart count logic
+            updateCartCount();
+
+            // Add page transition
+            const mainContent = document.querySelector('main');
+            mainContent.classList.add('animate__animated', 'animate__fadeIn');
+        });
+
+        function updateCartCount() {
+            // This is a placeholder - replace with your actual cart count fetching logic
+            fetch('/api/cart/count')
+                .then(response => response.json())
+                .catch(error => console.error('Error:', error))
+                .then(data => {
+                    // If you don't have this API endpoint, this won't work, but it won't break anything
+                    if(data && data.count) {
+                        document.getElementById('cartCount').textContent = data.count;
+                    }
+                });
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

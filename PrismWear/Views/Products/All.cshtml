@@ -2,21 +2,204 @@
 @inject PrismWear.Services.Data.ICategoriesService _categoriesService
 @model ProductListViewModel
 
+<style>
+    /* Products Page Styling */
+    .page-heading {
+        position: relative;
+        margin-bottom: 2.5rem;
+        font-weight: 700;
+        text-align: center;
+        padding-bottom: 0.5rem;
+        color: var(--text-dark);
+    }
 
+        .page-heading::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+        }
 
-<h1 class="text-center mt-4">@this.ViewData["Title"]</h1>
+    .filters-card {
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.95);
+        border: none;
+        margin-bottom: 2rem;
+    }
 
-<div class="container mt-4">
-    <div class="card shadow-sm p-3">
+    .filter-label {
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+    }
 
+    .form-select, .form-control {
+        border-radius: 8px;
+        padding: 0.6rem 1rem;
+        border: 1px solid rgba(0,0,0,0.1);
+        transition: all 0.3s;
+    }
+
+        .form-select:focus, .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(92, 107, 192, 0.25);
+        }
+
+    .filter-btn {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        border-radius: 30px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .filter-btn:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(92, 107, 192, 0.3);
+        }
+
+    .add-item-btn {
+        background-color: #3aa856;
+        border-color: #34974d;
+        color: white;
+        border-radius: 30px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 5px 15px rgba(58, 168, 86, 0.2);
+    }
+
+        .add-item-btn:hover {
+            background-color: #34974d;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(58, 168, 86, 0.3);
+        }
+
+        .add-item-btn .add-icon {
+            transition: all 0.3s ease;
+        }
+
+        .add-item-btn:hover .add-icon {
+            transform: rotate(90deg);
+        }
+
+    .pagination {
+        margin-top: 2.5rem;
+    }
+
+    .page-link {
+        margin: 0 5px;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-dark);
+        border: 1px solid rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+        .page-link:hover {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+    .page-item.active .page-link {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .page-item.disabled .page-link {
+        opacity: 0.5;
+    }
+
+    .prev-next-link {
+        border-radius: 20px !important;
+        width: auto !important;
+        padding: 0 15px;
+    }
+
+    .loading-spinner {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+        .loading-spinner .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: var(--primary-color);
+        }
+
+    .loading-text {
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-top: 1rem;
+    }
+
+    @@media (max-width: 767.98px) {
+        .filters-form .form-row
+
+    {
+        flex-direction: column;
+    }
+
+    .filters-form .col-md-4 {
+        margin-bottom: 1rem;
+        width: 100%;
+    }
+
+    .buttons-wrapper {
+        flex-direction: column;
+        align-items: stretch !important;
+        width: 100%;
+    }
+
+    .filter-btn, .add-item-btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+        justify-content: center;
+    }
+
+    .page-link {
+        width: 35px;
+        height: 35px;
+        margin: 0 2px;
+        font-size: 0.9rem;
+    }
+
+    }</style>
+
+<h1 class="page-heading animate__animated animate__fadeIn mt-4 mb-5">@this.ViewData["Title"]</h1>
+
+<div class="container">
+    <div class="filters-card p-4 animate__animated animate__fadeInUp">
         <!-- Use a GET form to capture user-selected filters. -->
-        <form asp-controller="Products" asp-action="All" method="get">
-            <div class="row g-3 align-items-center">
+        <form asp-controller="Products" asp-action="All" method="get" class="filters-form">
+            <div class="row g-4 align-items-end">
                 <!-- Category dropdown -->
                 <div class="col-md-4">
-                    <label asp-for="Filters.CategoryId" class="form-label fw-bold">Category:</label>
+                    <label asp-for="Filters.CategoryId" class="filter-label">
+                        <i class="fas fa-tags me-2"></i>Категория:
+                    </label>
                     <select asp-for="Filters.CategoryId" class="form-select">
-                        <option value="0">All Categories</option>
+                        <option value="0">Всички категории</option>
                         @foreach (var category in _categoriesService.GetAllAsKeyValuePairs())
                         {
                             <option value="@category.Key">@category.Value</option>
@@ -26,70 +209,93 @@
 
                 <!-- Price range fields -->
                 <div class="col-md-4">
-                    <label class="form-label fw-bold">Price Range:</label>
+                    <label class="filter-label">
+                        <i class="fas fa-dollar-sign me-2"></i>Ценови диапазон:
+                    </label>
                     <div class="input-group">
-                        <input type="number" asp-for="Filters.MinPrice" class="form-control" placeholder="Min Price" min="0">
-                        <span class="input-group-text">-</span>
-                        <input type="number" asp-for="Filters.MaxPrice" class="form-control" placeholder="Max Price" min="0">
+                        <input type="number" asp-for="Filters.MinPrice" class="form-control" placeholder="Мин. цена" min="0">
+                        <span class="input-group-text"><i class="fas fa-arrows-alt-h"></i></span>
+                        <input type="number" asp-for="Filters.MaxPrice" class="form-control" placeholder="Макс. цена" min="0">
                     </div>
                 </div>
 
-                <!-- Both buttons in a single col -->
-                <div class="col-md-4 d-flex justify-content-end align-items-center gap-2">
-                    <button type="submit" class="btn btn-primary">
-                        Apply Filters
+                <div class="col-md-4 d-flex justify-content-end align-items-center gap-3 buttons-wrapper">
+                    <button type="submit" class="btn filter-btn">
+                        <i class="fas fa-filter me-2"></i>Приложи филтри
                     </button>
 
                     @if (User.IsInRole("Admin"))
                     {
-                        <button type="button" class="button" onclick="window.location.href='@Url.Action("Create", "Products")'">
-                            <span class="button__text">Add Item</span>
-                            <span class="button__icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" fill="none">
-                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                </svg>
-                            </span>
-                        </button>
-
+                        <a href="@Url.Action("Create", "Products")" class="btn add-item-btn">
+                            <span>Добави продукт</span>
+                            <i class="fas fa-plus add-icon"></i>
+                        </a>
                     }
                 </div>
             </div>
-          
+
         </form>
     </div>
 </div>
 
-<!-- Product List Partial -->
 <partial name="_ProductsPartial" model="@Model.Products" />
 
-<!-- (Optional) Loading Spinner -->
-<div>
-    <div id="loading" class="text-center mt-3" style="display: none;">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-        <p class="mt-2">Loading products...</p>
+<div class="loading-spinner text-center" id="loading" style="display: none;">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
     </div>
+    <p class="loading-text">Зареждане на продукти...</p>
 </div>
 
-<!-- Pagination -->
 <nav class="mt-4">
-    <ul class="pagination justify-content-center">
+    <ul class="pagination justify-content-center flex-wrap">
         <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
-            <a class="page-link"
+            <a class="page-link prev-next-link"
                asp-action="All"
                asp-route-pageNumber="@Model.PreviousPageNumber"
                asp-route-Filters.CategoryId="@Model.Filters.CategoryId"
                asp-route-Filters.MinPrice="@Model.Filters.MinPrice"
                asp-route-Filters.MaxPrice="@Model.Filters.MaxPrice">
-                Previous
+                <i class="fas fa-chevron-left me-1"></i> Назад
             </a>
         </li>
 
-        @for (int i = 1; i <= Model.PagesCount; i++)
+        @{
+            // Define max pages to show
+            const int maxPagesToShow = 5;
+            int startPage = Math.Max(1, Model.PageNumber - maxPagesToShow / 2);
+            int endPage = Math.Min(Model.PagesCount, startPage + maxPagesToShow - 1);
+
+            // Adjust start if we're near the end
+            if (endPage - startPage + 1 < maxPagesToShow && startPage > 1)
+            {
+                startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+            }
+
+            // Show ellipsis if needed
+            if (startPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-action="All"
+                       asp-route-pageNumber="1"
+                       asp-route-Filters.CategoryId="@Model.Filters.CategoryId"
+                       asp-route-Filters.MinPrice="@Model.Filters.MinPrice"
+                       asp-route-Filters.MaxPrice="@Model.Filters.MaxPrice">
+                        1
+                    </a>
+                </li>
+
+                if (startPage > 2)
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                }
+            }
+        }
+
+        @for (int i = startPage; i <= endPage; i++)
         {
             <li class="page-item @(i == Model.PageNumber ? "active" : "")">
                 <a class="page-link"
@@ -103,77 +309,62 @@
             </li>
         }
 
+        @{
+            // Show ellipsis if needed
+            if (endPage < Model.PagesCount)
+            {
+                if (endPage < Model.PagesCount - 1)
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                }
+
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-action="All"
+                       asp-route-pageNumber="@Model.PagesCount"
+                       asp-route-Filters.CategoryId="@Model.Filters.CategoryId"
+                       asp-route-Filters.MinPrice="@Model.Filters.MinPrice"
+                       asp-route-Filters.MaxPrice="@Model.Filters.MaxPrice">
+                        @Model.PagesCount
+                    </a>
+                </li>
+            }
+        }
+
         <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
-            <a class="page-link"
+            <a class="page-link prev-next-link"
                asp-action="All"
                asp-route-pageNumber="@Model.NextPageNumber"
                asp-route-Filters.CategoryId="@Model.Filters.CategoryId"
                asp-route-Filters.MinPrice="@Model.Filters.MinPrice"
                asp-route-Filters.MaxPrice="@Model.Filters.MaxPrice">
-                Next
+                Напред <i class="fas fa-chevron-right ms-1"></i>
             </a>
         </li>
     </ul>
 </nav>
 
-<!-- Styles for the Add Item button -->
-<style>
-    /* From Uiverse.io by andrew-demchenk0 */
-    .button {
-        position: relative;
-        width: 150px;
-        height: 40px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        border: 1px solid #34974d;
-        background-color: #3aa856;
-    }
+@section Scripts {
+    <script>
+        // Show loading spinner when submitting the filter form
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterForm = document.querySelector('.filters-form');
+            const loadingSpinner = document.getElementById('loading');
 
-    .button, .button__icon, .button__text {
-        transition: all 0.3s;
-    }
+            if (filterForm && loadingSpinner) {
+                filterForm.addEventListener('submit', function() {
+                    loadingSpinner.style.display = 'block';
+                });
+            }
 
-    .button__text {
-        transform: translateX(30px);
-        color: #fff;
-        font-weight: 600;
-    }
-
-    .button__icon {
-        position: absolute;
-        transform: translateX(109px);
-        height: 100%;
-        width: 39px;
-        background-color: #34974d;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .button .svg {
-        width: 30px;
-        stroke: #fff;
-    }
-
-    .button:hover {
-        background: #34974d;
-    }
-
-        .button:hover .button__text {
-            color: transparent;
-        }
-
-        .button:hover .button__icon {
-            width: 148px;
-            transform: translateX(0);
-        }
-
-    .button:active .button__icon {
-        background-color: #2e8644;
-    }
-
-    .button:active {
-        border: 1px solid #2e8644;
-    }
-</style>
+            // Add animation to product cards on load
+            const productCards = document.querySelectorAll('.product-card');
+            productCards.forEach((card, index) => {
+                card.classList.add('animate__animated', 'animate__fadeInUp');
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+}

@@ -18,5 +18,7 @@ namespace PrismWear.Services.Data
 
         Task EditAsync(int id, EditProductInputModel viewModel);
 
+        IEnumerable<ProductInListViewModel> GetAll();
+
     }
 }

@@ -16,6 +16,34 @@ namespace PrismWear.Services.Data
             this.productsRepository = productRepository;
         }
 
+
+        public IEnumerable<ProductInListViewModel> GetAll()
+        {
+            // This assumes you have a Product entity and a ProductInListViewModel
+            // that matches the properties you need to display on the page.
+
+            var products = this.productsRepository.All()
+                .Select(p => new ProductInListViewModel
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    CategoryName = p.Category.Name,
+                    Images = p.Images
+                        .Select(img => new Image
+                        {
+                            Id = img.Id,
+                            Extension = img.Extension,
+                        })
+                        .ToList(),
+                })
+                .ToList();
+
+            return products;
+        }
+
+
+
         public async Task CreateAsync(CreateProductInputModel input, string userId, string imagePath)
         {
             
@@ -218,7 +246,7 @@ namespace PrismWear.Services.Data
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
-                    ImageUrl = $"/images/products/{x.Images.FirstOrDefault().Id}.{x.Images.FirstOrDefault().Extension}",
+                    Images = x.Images.ToList(),
                     Price = x.Price,
                     CategoryName = x.Category.Name,
                     Details = x.ProductDetails
