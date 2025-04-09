@@ -17,7 +17,7 @@ namespace PrismWear.Data.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -47,6 +47,22 @@ namespace PrismWear.Data.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "45989dba-9350-4d78-b2f4-afef33936dbe",
+                            ConcurrencyStamp = "df2b7237-93f2-4cd8-bdd3-5c452677b935",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "c696fe2c-f184-4adb-839c-4607ba5c0dc5",
+                            ConcurrencyStamp = "ab6414c3-2391-42f5-bd5c-2a64267dc709",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -137,6 +153,24 @@ namespace PrismWear.Data.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "d61ae36a-b528-4d0f-b1c1-b5546a7098f9",
+                            Email = "admin@myapp.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@MYAPP.COM",
+                            NormalizedUserName = "ADMIN@MYAPP.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBheA/UaJzgCE+mtgDRxqzUD0/Wk07hacMTEcg3eAC7kl0UtLlHxfyvTnI/vZkSiNQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "ab6414c3-2391-42f5-bd5c-2a64267dc709",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@myapp.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -167,12 +201,10 @@ namespace PrismWear.Data.Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -201,6 +233,13 @@ namespace PrismWear.Data.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            RoleId = "45989dba-9350-4d78-b2f4-afef33936dbe"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -209,12 +248,10 @@ namespace PrismWear.Data.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -378,6 +415,242 @@ namespace PrismWear.Data.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Images");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "Мъжка-1",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 1
+                        },
+                        new
+                        {
+                            Id = "Мъжка-г-1",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 1
+                        },
+                        new
+                        {
+                            Id = "Мъжка-п-2",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 2
+                        },
+                        new
+                        {
+                            Id = "Мъжка-2",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 2
+                        },
+                        new
+                        {
+                            Id = "Мъжка-3",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 3
+                        },
+                        new
+                        {
+                            Id = "Мъжка-г-3",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 3
+                        },
+                        new
+                        {
+                            Id = "Мъжка-4",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 4
+                        },
+                        new
+                        {
+                            Id = "Мъжка-г-4",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 4
+                        },
+                        new
+                        {
+                            Id = "Мъжка-6",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 5
+                        },
+                        new
+                        {
+                            Id = "Мъжка-г-6",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 5
+                        },
+                        new
+                        {
+                            Id = "Мъжка-7",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpeg",
+                            IsDeleted = false,
+                            ProductId = 6
+                        },
+                        new
+                        {
+                            Id = "Мъжка-г-7",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpeg",
+                            IsDeleted = false,
+                            ProductId = 6
+                        },
+                        new
+                        {
+                            Id = "Женска-1",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 7
+                        },
+                        new
+                        {
+                            Id = "Женска-г-1",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 7
+                        },
+                        new
+                        {
+                            Id = "Женска-2",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 8
+                        },
+                        new
+                        {
+                            Id = "Женска-г-2",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 8
+                        },
+                        new
+                        {
+                            Id = "Женска-3",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 9
+                        },
+                        new
+                        {
+                            Id = "Женска-г-3",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 9
+                        },
+                        new
+                        {
+                            Id = "Женска-4",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpeg",
+                            IsDeleted = false,
+                            ProductId = 10
+                        },
+                        new
+                        {
+                            Id = "Женска-г-4",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 10
+                        },
+                        new
+                        {
+                            Id = "Женска-5",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 11
+                        },
+                        new
+                        {
+                            Id = "Женска-г-5",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpeg",
+                            IsDeleted = false,
+                            ProductId = 11
+                        },
+                        new
+                        {
+                            Id = "Женска-6",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpeg",
+                            IsDeleted = false,
+                            ProductId = 12
+                        },
+                        new
+                        {
+                            Id = "Женска-г-6",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 12
+                        },
+                        new
+                        {
+                            Id = "Женска-7",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 13
+                        },
+                        new
+                        {
+                            Id = "Женска-г-7",
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extension = "jpg",
+                            IsDeleted = false,
+                            ProductId = 13
+                        });
                 });
 
             modelBuilder.Entity("PrismWear.Data.Models.Order", b =>
@@ -526,6 +799,151 @@ namespace PrismWear.Data.Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CategoryId = 1,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "95% памук, 5% еластан",
+                            IsDeleted = false,
+                            Name = "The Nun",
+                            Price = 29.989999999999998
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CategoryId = 1,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "95% памук, 5% еластан",
+                            IsDeleted = false,
+                            Name = "Stylish Hoodie",
+                            Price = 29.989999999999998
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CategoryId = 1,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "95% памук, 5% еластан",
+                            IsDeleted = false,
+                            Name = "Elegant Dress",
+                            Price = 49.990000000000002
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CategoryId = 1,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "95% памук, 5% еластан",
+                            IsDeleted = false,
+                            Name = "s",
+                            Price = 29.989999999999998
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CategoryId = 1,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "95% памук, 5% еластан",
+                            IsDeleted = false,
+                            Name = "d",
+                            Price = 29.989999999999998
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CategoryId = 1,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "95% памук, 5% еластан",
+                            IsDeleted = false,
+                            Name = "f",
+                            Price = 49.990000000000002
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CategoryId = 2,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "95% памук, 5% еластан",
+                            IsDeleted = false,
+                            Name = "v",
+                            Price = 49.990000000000002
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CategoryId = 2,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "95% памук, 5% еластан",
+                            IsDeleted = false,
+                            Name = "v",
+                            Price = 49.990000000000002
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CategoryId = 2,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "95% памук, 5% еластан",
+                            IsDeleted = false,
+                            Name = "v",
+                            Price = 49.990000000000002
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CategoryId = 2,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "95% памук, 5% еластан",
+                            IsDeleted = false,
+                            Name = "v",
+                            Price = 49.990000000000002
+                        },
+                        new
+                        {
+                            Id = 11,
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CategoryId = 2,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "95% памук, 5% еластан",
+                            IsDeleted = false,
+                            Name = "v",
+                            Price = 49.990000000000002
+                        },
+                        new
+                        {
+                            Id = 12,
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CategoryId = 2,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "95% памук, 5% еластан",
+                            IsDeleted = false,
+                            Name = "v",
+                            Price = 49.990000000000002
+                        },
+                        new
+                        {
+                            Id = 13,
+                            AddedByUser = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                            CategoryId = 2,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "95% памук, 5% еластан",
+                            IsDeleted = false,
+                            Name = "v",
+                            Price = 49.990000000000002
+                        });
                 });
 
             modelBuilder.Entity("PrismWear.Data.Models.ProductDetail", b =>
@@ -562,6 +980,476 @@ namespace PrismWear.Data.Data.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductDetails");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 1,
+                            Quantity = 10,
+                            Size = "S"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 1,
+                            Quantity = 8,
+                            Size = "M"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 1,
+                            Quantity = 5,
+                            Size = "L"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 1,
+                            Quantity = 6,
+                            Size = "XL"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 2,
+                            Quantity = 4,
+                            Size = "S"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 2,
+                            Quantity = 4,
+                            Size = "M"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 2,
+                            Quantity = 3,
+                            Size = "L"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 2,
+                            Quantity = 3,
+                            Size = "XL"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 3,
+                            Quantity = 6,
+                            Size = "S"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 3,
+                            Quantity = 5,
+                            Size = "M"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 3,
+                            Quantity = 6,
+                            Size = "L"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 3,
+                            Quantity = 6,
+                            Size = "XL"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 4,
+                            Quantity = 6,
+                            Size = "S"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 4,
+                            Quantity = 5,
+                            Size = "M"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 4,
+                            Quantity = 6,
+                            Size = "L"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 4,
+                            Quantity = 6,
+                            Size = "XL"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 5,
+                            Quantity = 6,
+                            Size = "S"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 5,
+                            Quantity = 5,
+                            Size = "M"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 5,
+                            Quantity = 6,
+                            Size = "L"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 5,
+                            Quantity = 6,
+                            Size = "XL"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 6,
+                            Quantity = 6,
+                            Size = "S"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 6,
+                            Quantity = 5,
+                            Size = "M"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 6,
+                            Quantity = 6,
+                            Size = "L"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 6,
+                            Quantity = 6,
+                            Size = "XL"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 7,
+                            Quantity = 6,
+                            Size = "S"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 7,
+                            Quantity = 5,
+                            Size = "M"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 7,
+                            Quantity = 6,
+                            Size = "L"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 8,
+                            Quantity = 6,
+                            Size = "XL"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 8,
+                            Quantity = 6,
+                            Size = "S"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 8,
+                            Quantity = 5,
+                            Size = "M"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 8,
+                            Quantity = 6,
+                            Size = "L"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 8,
+                            Quantity = 6,
+                            Size = "XL"
+                        },
+                        new
+                        {
+                            Id = 33,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 9,
+                            Quantity = 6,
+                            Size = "S"
+                        },
+                        new
+                        {
+                            Id = 34,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 9,
+                            Quantity = 5,
+                            Size = "M"
+                        },
+                        new
+                        {
+                            Id = 35,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 9,
+                            Quantity = 6,
+                            Size = "L"
+                        },
+                        new
+                        {
+                            Id = 36,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 9,
+                            Quantity = 6,
+                            Size = "XL"
+                        },
+                        new
+                        {
+                            Id = 37,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 10,
+                            Quantity = 6,
+                            Size = "S"
+                        },
+                        new
+                        {
+                            Id = 38,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 10,
+                            Quantity = 5,
+                            Size = "M"
+                        },
+                        new
+                        {
+                            Id = 39,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 10,
+                            Quantity = 6,
+                            Size = "L"
+                        },
+                        new
+                        {
+                            Id = 40,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 10,
+                            Quantity = 6,
+                            Size = "XL"
+                        },
+                        new
+                        {
+                            Id = 41,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 11,
+                            Quantity = 6,
+                            Size = "S"
+                        },
+                        new
+                        {
+                            Id = 42,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 11,
+                            Quantity = 5,
+                            Size = "M"
+                        },
+                        new
+                        {
+                            Id = 43,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 11,
+                            Quantity = 6,
+                            Size = "L"
+                        },
+                        new
+                        {
+                            Id = 44,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 11,
+                            Quantity = 6,
+                            Size = "XL"
+                        },
+                        new
+                        {
+                            Id = 45,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 12,
+                            Quantity = 6,
+                            Size = "S"
+                        },
+                        new
+                        {
+                            Id = 46,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 12,
+                            Quantity = 5,
+                            Size = "M"
+                        },
+                        new
+                        {
+                            Id = 47,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 12,
+                            Quantity = 6,
+                            Size = "L"
+                        },
+                        new
+                        {
+                            Id = 48,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 12,
+                            Quantity = 6,
+                            Size = "XL"
+                        },
+                        new
+                        {
+                            Id = 49,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 13,
+                            Quantity = 6,
+                            Size = "S"
+                        },
+                        new
+                        {
+                            Id = 50,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 13,
+                            Quantity = 5,
+                            Size = "M"
+                        },
+                        new
+                        {
+                            Id = 51,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 13,
+                            Quantity = 6,
+                            Size = "L"
+                        },
+                        new
+                        {
+                            Id = 52,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            ProductId = 13,
+                            Quantity = 6,
+                            Size = "XL"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

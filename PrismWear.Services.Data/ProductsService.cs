@@ -60,10 +60,9 @@ namespace PrismWear.Services.Data
             product.ProductDetails = input.Sizes
        .Select(sq => new ProductDetail
        {
-          
-           Size = sq.SizeName,
+           Size = sq.SizeName,    
            Quantity = sq.Quantity,
-           ProductId=product.Id,
+           ProductId = product.Id,
        })
        .ToList();
 

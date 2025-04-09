@@ -9,7 +9,10 @@
         public int PreviousPageNumber => this.PageNumber - 1;
         public int NextPageNumber => this.PageNumber + 1;
         public int PageNumber { get; set; }
-        public int PagesCount => (int)Math.Ceiling((double)this.ProductsCount / this.ItemsPerPage);
+        public int PagesCount =>
+      ItemsPerPage > 0
+          ? (int)Math.Ceiling((double)this.ProductsCount / this.ItemsPerPage)
+          : 0;
         public int ProductsCount { get; set; }
         public int ItemsPerPage { get; set; }
     }

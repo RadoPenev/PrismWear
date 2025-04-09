@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrismWear.Web.ViewModels", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrismWear.Common", "PrismWear.Common\PrismWear.Common.csproj", "{40975D23-D667-4B8C-B652-ECB4306288AE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E0E8E59C-BB7A-46A9-801D-E8FCF19CA5F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrismWear.Test", "PrismWear.Test.Services\PrismWear.Test.csproj", "{04EB6257-06F7-4B1D-8F37-BC3DC5D9D376}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +59,10 @@ Global
 		{40975D23-D667-4B8C-B652-ECB4306288AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40975D23-D667-4B8C-B652-ECB4306288AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40975D23-D667-4B8C-B652-ECB4306288AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04EB6257-06F7-4B1D-8F37-BC3DC5D9D376}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04EB6257-06F7-4B1D-8F37-BC3DC5D9D376}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04EB6257-06F7-4B1D-8F37-BC3DC5D9D376}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04EB6257-06F7-4B1D-8F37-BC3DC5D9D376}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,5 +72,6 @@ Global
 		{79BBF3EA-1658-45AA-9A1A-13CD2018A4D2} = {672243C1-DA5B-47A9-89C0-4EA292B2ECC2}
 		{88C9ED72-DA31-489F-BBD3-1E3902DF02D0} = {672243C1-DA5B-47A9-89C0-4EA292B2ECC2}
 		{BA15BDDD-A855-4CE6-9776-D3F8FE635915} = {F8772D79-302B-416C-A137-38A7237E5B47}
+		{04EB6257-06F7-4B1D-8F37-BC3DC5D9D376} = {E0E8E59C-BB7A-46A9-801D-E8FCF19CA5F3}
 	EndGlobalSection
 EndGlobal

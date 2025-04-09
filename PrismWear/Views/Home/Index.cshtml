@@ -189,8 +189,8 @@
                     <div class="col-6">
                         <div class="feature-box animate__animated animate__fadeInRight animate__delay-1s">
                             <i class="fas fa-palette feature-icon"></i>
-                            <h3 class="feature-title">Уникални Цветове</h3>
-                            <p>Всяка тениска с неповторим цвят</p>
+                            <h3 class="feature-title">Уникални Модели</h3>
+                            <p>Всяка тениска с неповторим модел</p>
                         </div>
                     </div>
                     <div class="col-6">
@@ -235,7 +235,7 @@
         <h2 class="section-title animate__animated animate__fadeIn">Популярни Продукти</h2>
 
         <!-- Use your partial view for products here -->
-        <partial name="_ProductsPartial" model="@Model.Products" />
+        <partial name="_ProductsPartial" model="Model.Products.Take(4)" />
 
         <div class="text-center mt-4">
             <a href="/Products/All" class="btn btn-primary btn-lg">

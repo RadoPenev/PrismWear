@@ -1,4 +1,5 @@
 ﻿using PrismWear.Data.Models;
+using PrismWear.Web.ViewModels.Sizes;
 
 namespace PrismWear.Web.ViewModels.Cart
 {
@@ -18,5 +19,7 @@ namespace PrismWear.Web.ViewModels.Cart
         public int ProductId { get; set; }
 
         public Product Product { get; set; }
+
+        public List<ProductDetailViewModel> Details{ get; set; } 
     }
 }

@@ -1,26 +1,45 @@
-﻿using PrismWear.Data.Models;
-using PrismWear.Web.ViewModels.Cart;
-using System;
+﻿using PrismWear.Web.ViewModels.Cart;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
-namespace PrismWear.Web.ViewModels.Orders
+public class OrderViewModel
 {
-    public class OrderViewModel
-    {
-        public string OrderId { get; set; }
-        public string UserId { get; set; }
-        public string CartId { get; set; }
-        public decimal SubTotal { get; set; }
-        public decimal ShippingCost { get; set; }
-        public decimal TotalAmount { get; set; }
-        public string ShippingAddress { get; set; }
-        public string ShippingCity { get; set; }
-        public string ShippingState { get; set; }
-        public string ShippingZipCode { get; set; }
-        public string PaymentMethod { get; set; }
-        public List<CartItemViewModel> CartItems { get; set; }
-    }
+    [Required]
+    public string OrderId { get; set; }
+
+    [Required]
+    public string UserId { get; set; }
+
+    [Required]
+    public string CartId { get; set; }
+
+    [Range(0.0, double.MaxValue, ErrorMessage = "Subtotal must be a non-negative value.")]
+    public decimal SubTotal { get; set; }
+
+    [Range(0.0, double.MaxValue, ErrorMessage = "Shipping cost must be a non-negative value.")]
+    public decimal ShippingCost { get; set; }
+
+    [Range(0.0, double.MaxValue, ErrorMessage = "Total amount must be a non-negative value.")]
+    public decimal TotalAmount { get; set; }
+
+    [Required]
+    [StringLength(200, MinimumLength = 5, ErrorMessage = "Shipping address must be between 5 and 200 characters.")]
+    public string ShippingAddress { get; set; }
+
+    [Required]
+    [StringLength(100, MinimumLength = 2, ErrorMessage = "City name must be between 2 and 100 characters.")]
+    public string ShippingCity { get; set; }
+
+    [Required]
+    [StringLength(100, MinimumLength = 2, ErrorMessage = "State name must be between 2 and 100 characters.")]
+    public string ShippingState { get; set; }
+
+    [Required]
+    [StringLength(10, MinimumLength = 4, ErrorMessage = "ZIP Code must be between 4 and 10 characters.")]
+    public string ShippingZipCode { get; set; }
+
+
+    [Required(ErrorMessage = "Cart must contain at least one item.")]
+    [MinLength(1, ErrorMessage = "Cart must contain at least one item.")]
+    public List<CartItemViewModel> CartItems { get; set; }
 }
