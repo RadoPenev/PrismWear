@@ -44,7 +44,7 @@ namespace PrismWear.Test.UnitTests.Models
             var model = new CategoryViewModel
             {
                 Id = 1,
-                Name = new string('X', 51) // 51 characters
+                Name = new string('X', 51)
             };
 
             var isValid = ValidateModel(model, out var results);

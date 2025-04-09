@@ -15,7 +15,7 @@ namespace PrismWear
 {
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -27,13 +27,11 @@ namespace PrismWear
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            // Configure Identity with more explicit setup
             builder.Services
                 .AddIdentity<IdentityUser, IdentityRole>(options =>
                 {
                     options.SignIn.RequireConfirmedAccount = false;
 
-                    // Password requirements
                     options.Password.RequireDigit = true;
                     options.Password.RequireLowercase = true;
                     options.Password.RequireUppercase = true;
@@ -43,14 +41,12 @@ namespace PrismWear
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            // Add authentication and authorization
             builder.Services.AddAuthentication();
             builder.Services.AddAuthorization();
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
 
-            // Repositories and Services
             builder.Services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 

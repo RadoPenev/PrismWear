@@ -4,14 +4,14 @@ using PrismWear.Data.Common.Repositories;
 using PrismWear.Data.Models;
 using PrismWear.Services.Data;
 using PrismWear.Web.ViewModels;
-using PrismWear.Web.ViewModels.Products;  // if you keep them here
+using PrismWear.Web.ViewModels.Products;
 using PrismWear.Web.ViewModels.Sizes;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http; // for IFormFile
+using Microsoft.AspNetCore.Http; 
 using Microsoft.EntityFrameworkCore;
 using static System.StringComparer;
 
@@ -26,17 +26,14 @@ namespace PrismWear.Tests.Services
         [SetUp]
         public void SetUp()
         {
-            // 1) Create a mock of the repository
             _mockProductsRepo = new Mock<IDeletableEntityRepository<Product>>();
 
-            // 2) Pass it into your ProductsService
             _productsService = new ProductsService(_mockProductsRepo.Object);
         }
 
         [Test]
         public void GetAll_ShouldReturnAllProductsAsViewModels()
         {
-            // Arrange
             var data = new List<Product>
             {
                 new Product
@@ -62,10 +59,8 @@ namespace PrismWear.Tests.Services
 
             _mockProductsRepo.Setup(r => r.All()).Returns(data);
 
-            // Act
             var result = _productsService.GetAll().ToList();
 
-            // Assert
             Assert.That(result.Count, Is.EqualTo(2));
             Assert.That(result[0].Name, Is.EqualTo("Shirt"));
             Assert.That(result[0].Price, Is.EqualTo(29.99));
@@ -82,7 +77,6 @@ namespace PrismWear.Tests.Services
         [Test]
         public async Task CreateAsync_ShouldAddProductAndSaveChanges()
         {
-            // Arrange
             var inputModel = new CreateProductInputModel
             {
                 Name = "New Product",
@@ -91,8 +85,6 @@ namespace PrismWear.Tests.Services
                 CategoryId = 123,
                 Sizes = new List<SizeQuantityViewModel>
         {
-            // If your service code expects 'SizeName',
-            // make sure it's used consistently there as well.
             new() { SizeName = "S", Quantity = 10 },
             new() { SizeName = "M", Quantity = 5 },
         },
@@ -105,30 +97,24 @@ namespace PrismWear.Tests.Services
             var userId = "TestUserId";
             var imagePath = "SomeTestPath";
 
-            // Mock 'AddAsync' to do nothing (return Task) 
             _mockProductsRepo
                 .Setup(r => r.AddAsync(It.IsAny<Product>()))
                 .Returns(Task.CompletedTask);
 
-            // Mock 'SaveChangesAsync' to return an int, which EF typically does
             _mockProductsRepo
                 .Setup(r => r.SaveChangesAsync())
-                .ReturnsAsync(1); // <-- returns Task<int>
+                .ReturnsAsync(1);
 
-            // Act
             await _productsService.CreateAsync(inputModel, userId, imagePath);
 
-            // Assert
-            // 1) Verify that AddAsync was called with the expected Product fields
             _mockProductsRepo.Verify(r => r.AddAsync(It.Is<Product>(p =>
                 p.Name == "New Product"
                 && p.Description == "Description"
                 && p.CategoryId == 123
-                && p.ProductDetails.Count == 2 // S, M
-                && p.Images.Count == 1         // 1 image
+                && p.ProductDetails.Count == 2
+                && p.Images.Count == 1
             )), Times.Once);
 
-            // 2) Ensure SaveChangesAsync was indeed called
             _mockProductsRepo.Verify(r => r.SaveChangesAsync(), Times.Once);
         }
 
@@ -136,7 +122,6 @@ namespace PrismWear.Tests.Services
         [Test]
         public async Task DeleteAsync_ShouldRemoveProductAndSaveChanges()
         {
-            // Arrange
             var productToDelete = new Product
             {
                 Id = 999,
@@ -145,25 +130,20 @@ namespace PrismWear.Tests.Services
 
             var data = new List<Product> { productToDelete }.AsQueryable();
 
-            // We mock "All()" to return a queryable containing just that product
             _mockProductsRepo.Setup(r => r.All()).Returns(data);
             _mockProductsRepo.Setup(r => r.Delete(It.IsAny<Product>())).Verifiable();
 
-            // Instead of casting Task.CompletedTask, return Task<int>:
             _mockProductsRepo.Setup(r => r.SaveChangesAsync())
-                .ReturnsAsync(1); // <--- this fixes the casting issue
+                .ReturnsAsync(1);
 
-            // Act
             await _productsService.DeleteAsync(999);
 
-            // Assert
             _mockProductsRepo.Verify(r => r.Delete(It.Is<Product>(p => p.Id == 999)), Times.Once);
             _mockProductsRepo.Verify(r => r.SaveChangesAsync(), Times.Once);
         }
         [Test]
         public async Task EditAsync_ShouldUpdateProductAndSaveChanges()
         {
-            // Arrange
             var existingProduct = new Product
             {
                 Id = 10,
@@ -184,11 +164,9 @@ namespace PrismWear.Tests.Services
                 .Setup(r => r.All())
                 .Returns(data);
 
-            // IMPORTANT: Return Task<int> with .ReturnsAsync(...) 
-            // instead of casting Task.CompletedTask to Task<int>.
             _mockProductsRepo
                 .Setup(r => r.SaveChangesAsync())
-                .ReturnsAsync(1); // e.g., 1 record affected
+                .ReturnsAsync(1);
 
             var editModel = new EditProductInputModel
             {
@@ -204,10 +182,8 @@ namespace PrismWear.Tests.Services
         }
             };
 
-            // Act
             await _productsService.EditAsync(10, editModel);
 
-            // Assert
             Assert.That(existingProduct.Name, Is.EqualTo("NewName"));
             Assert.That(existingProduct.Description, Is.EqualTo("NewDesc"));
             Assert.That(existingProduct.Price, Is.EqualTo(25.0));
@@ -226,7 +202,6 @@ namespace PrismWear.Tests.Services
         [Test]
         public void GetFilteredProducts_ShouldFilterByCategoryAndPrice()
         {
-            // Arrange
             var productsData = new List<Product>
             {
                 new Product { Id = 1, CategoryId = 5, Price = 50, Category = new Category { Name = "Shirts" } },
@@ -237,11 +212,8 @@ namespace PrismWear.Tests.Services
             _mockProductsRepo.Setup(r => r.All())
                 .Returns(productsData);
 
-            // Act
             var results = _productsService.GetFilteredProducts(categoryId: 5, minPrice: 50, maxPrice: 150).ToList();
 
-            // Assert
-            // Should only have the first two
             Assert.That(results.Count, Is.EqualTo(2));
             Assert.That(results.Any(x => x.Id == 3), Is.False);
         }
@@ -249,7 +221,6 @@ namespace PrismWear.Tests.Services
         [Test]
         public void GetById_ShouldReturnSingleProduct_WhenFound()
         {
-            // Arrange
             var productsData = new List<Product>
             {
                 new Product
@@ -273,10 +244,8 @@ namespace PrismWear.Tests.Services
             _mockProductsRepo.Setup(r => r.AllAsNoTracking())
                 .Returns(productsData);
 
-            // Act
             var result = _productsService.GetById(100);
 
-            // Assert
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Id, Is.EqualTo(100));
             Assert.That(result.Name, Is.EqualTo("The Product"));
@@ -288,18 +257,15 @@ namespace PrismWear.Tests.Services
         [Test]
         public void GetById_ShouldThrow_WhenProductDoesNotExist()
         {
-            // Arrange
             var emptyData = new List<Product>().AsQueryable();
             _mockProductsRepo.Setup(r => r.AllAsNoTracking()).Returns(emptyData);
 
-            // Act & Assert
             Assert.Throws<NullReferenceException>(() => _productsService.GetById(1234));
         }
 
         [Test]
         public void GetCount_ShouldReturnTotalNumberOfProducts()
         {
-            // Arrange
             var productsData = new List<Product>
             {
                 new Product { Id = 1 },
@@ -309,20 +275,13 @@ namespace PrismWear.Tests.Services
 
             _mockProductsRepo.Setup(r => r.All()).Returns(productsData);
 
-            // Act
             var count = _productsService.GetCount();
 
-            // Assert
             Assert.That(count, Is.EqualTo(3));
         }
 
-        // You can add more tests for GetProducts(...) with paging logic, etc.
     }
 
-    /// <summary>
-    /// A simple IFormFile stub for testing file upload logic.
-    /// This avoids writing to disk if you handle CopyToAsync carefully.
-    /// </summary>
     public class FakeFormFile : IFormFile
     {
         public string FileName { get; set; } = "fake.png";
@@ -332,7 +291,7 @@ namespace PrismWear.Tests.Services
         public long Length => 0;
         public string Name => "fake";
 
-        public void CopyTo(Stream target) { /* no-op for tests */ }
+        public void CopyTo(Stream target) {  }
         public Task CopyToAsync(Stream target, CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;

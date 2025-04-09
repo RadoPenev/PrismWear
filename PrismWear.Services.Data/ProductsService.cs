@@ -19,8 +19,6 @@ namespace PrismWear.Services.Data
 
         public IEnumerable<ProductInListViewModel> GetAll()
         {
-            // This assumes you have a Product entity and a ProductInListViewModel
-            // that matches the properties you need to display on the page.
 
             var products = this.productsRepository.All()
                 .Select(p => new ProductInListViewModel

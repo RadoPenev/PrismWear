@@ -195,7 +195,6 @@
 
 <div class="container cart-container">
     <div class="row g-4">
-        <!-- Cart Items Column -->
         <div class="col-lg-8 animate__animated animate__fadeIn">
             <div class="cart-items-container">
                 @if (Model.Items.Any())
@@ -219,7 +218,6 @@
             </div>
         </div>
 
-        <!-- Order Summary Column -->
         <div class="col-lg-4 animate__animated animate__fadeIn animate__delay-1s">
             <div class="summary-card p-4">
                 <h5 class="summary-title">Обобщение на поръчката</h5>
@@ -278,9 +276,7 @@
 @section Scripts {
     <script>
         $(document).ready(function() {
-            // Handle quantity changes if needed
             $('.quantity-btn').on('click', function() {
-                // Your quantity update code here
             });
         });
     </script>

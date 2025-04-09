@@ -35,7 +35,6 @@
             background-size: cover;
             color: var(--text-dark);
             transition: background-color 0.5s ease;
-            /* Margin bottom by footer height */
             margin-bottom: 60px;
             min-height: 100vh;
         }
@@ -43,11 +42,11 @@
         .content-wrapper {
             width: 100%;
             animation: fadeIn 0.8s ease-in-out;
-            padding-bottom: 70px; /* Ensure there's space for the footer */
+            padding-bottom: 70px;
         }
 
         main {
-            min-height: calc(100vh - 180px); /* viewport height minus header and footer */
+            min-height: calc(100vh - 180px); 
         }
 
         .custom-footer {
@@ -57,7 +56,7 @@
             color: var(--text-light) !important;
             padding: 1rem 0;
             width: 100%;
-            height: 60px; /* Set the fixed height of the footer */
+            height: 60px;
         }
 
             .custom-footer a {
@@ -71,7 +70,6 @@
                     opacity: 0.9;
                 }
 
-        /* Enhanced Navbar */
         .custom-navbar {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
             padding: 0.8rem 1rem;
@@ -123,7 +121,6 @@
                 box-shadow: none;
             }
 
-        /* Cart Icon Animation */
         .cart-icon {
             position: relative;
             transition: all var(--transition-speed);
@@ -146,7 +143,6 @@
             animation: pulse 1.5s infinite;
         }
 
-        /* Product Cards Styling */
         .product-card {
             border-radius: 8px;
             overflow: hidden;
@@ -205,7 +201,6 @@
                 transform: translateY(-2px);
             }
 
-        /* Animations */
         @@keyframes fadeIn {
             from
 
@@ -238,7 +233,6 @@
 
         }
 
-        /* Page transitions */
         .page-enter {
             opacity: 0;
         }
@@ -248,7 +242,6 @@
             transition: opacity 500ms;
         }
 
-        /* Form styling */
         .form-control:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 0.25rem rgba(92, 107, 192, 0.25);
@@ -259,7 +252,6 @@
             color: var(--text-dark);
         }
 
-        /* Category badges */
         .category-badge {
             display: inline-block;
             padding: 0.25rem 0.5rem;
@@ -277,7 +269,6 @@
                 transform: scale(1.05);
             }
 
-        /* Responsive fixes */
         @@media (max-width: 768px) {
             .navbar-collapse
 
@@ -362,26 +353,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
-        // Initialize animations
         new WOW().init();
 
-        // Simulate cart count (you'll need to replace this with your actual cart implementation)
         document.addEventListener('DOMContentLoaded', function() {
-            // Replace with your actual cart count logic
             updateCartCount();
-
-            // Add page transition
             const mainContent = document.querySelector('main');
             mainContent.classList.add('animate__animated', 'animate__fadeIn');
         });
 
         function updateCartCount() {
-            // This is a placeholder - replace with your actual cart count fetching logic
             fetch('/api/cart/count')
                 .then(response => response.json())
                 .catch(error => console.error('Error:', error))
                 .then(data => {
-                    // If you don't have this API endpoint, this won't work, but it won't break anything
                     if(data && data.count) {
                         document.getElementById('cartCount').textContent = data.count;
                     }

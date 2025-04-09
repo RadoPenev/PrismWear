@@ -120,7 +120,6 @@
             background: var(--primary-color);
         }
 
-    /* Product Card styles if you want them to apply to the partial’s cards */
     .product-card {
         border-radius: 10px;
         overflow: hidden;
@@ -170,7 +169,6 @@
     }
 </style>
 
-<!-- Hero Section -->
 <section class="hero-section">
     <div class="hero-overlay"></div>
     <div class="container hero-container">
@@ -217,7 +215,7 @@
                 </div>
             </div>
         </div>
-    </div><!-- /.hero-container -->
+    </div>
     <div class="wave-bg">
         <svg data-name="Layer 1"
              xmlns="http://www.w3.org/2000/svg"
@@ -228,13 +226,10 @@
         </svg>
     </div>
 </section>
-<!-- /.hero-section -->
-<!-- Featured Products Section -->
 <section class="featured-section">
     <div class="container">
         <h2 class="section-title animate__animated animate__fadeIn">Популярни Продукти</h2>
 
-        <!-- Use your partial view for products here -->
         <partial name="_ProductsPartial" model="Model.Products.Take(4)" />
 
         <div class="text-center mt-4">
@@ -248,7 +243,6 @@
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Add page transition
             const mainContent = document.querySelector('main');
             if (mainContent) {
                 mainContent.classList.add('animate__animated', 'animate__fadeIn');

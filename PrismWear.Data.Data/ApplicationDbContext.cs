@@ -88,8 +88,8 @@ namespace PrismWear.Data
 
             var userRole = new IdentityUserRole<string>
             {
-                UserId = "f45b8455-8f1d-4b28-96a1-7321cd9829de", // must match your user’s Id
-                RoleId = "45989dba-9350-4d78-b2f4-afef33936dbe"   // must match the role’s Id
+                UserId = "f45b8455-8f1d-4b28-96a1-7321cd9829de",
+                RoleId = "45989dba-9350-4d78-b2f4-afef33936dbe"
             };
 
             builder.Entity<IdentityUserRole<string>>().HasData(userRole);

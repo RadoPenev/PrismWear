@@ -26,7 +26,6 @@ namespace PrismWear.Tests.Services
         [Test]
         public async Task CreateAsync_ShouldAddCategoryAndSaveChanges()
         {
-            // Arrange
             var input = new CreateCategoryInputModel
             {
                 Name = "New Category",
@@ -41,10 +40,8 @@ namespace PrismWear.Tests.Services
                 .Setup(r => r.SaveChangesAsync())
                 .ReturnsAsync(1);
 
-            // Act
             await _categoriesService.CreateAsync(input, userId);
 
-            // Assert
             _mockCategoriesRepo.Verify(r => r.AddAsync(It.Is<Category>(c =>
                 c.Name == "New Category" &&
                 c.AddedByUser == userId
@@ -56,7 +53,6 @@ namespace PrismWear.Tests.Services
         [Test]
         public async Task EditAsync_ShouldUpdateCategoryAndSaveChanges()
         {
-            // Arrange
             var existingCategory = new Category
             {
                 Id = 10,
@@ -78,10 +74,8 @@ namespace PrismWear.Tests.Services
                 Name = "NewName",
             };
 
-            // Act
             await _categoriesService.EditAsync(10, input);
 
-            // Assert
             Assert.That(existingCategory.Name, Is.EqualTo("NewName"));
             _mockCategoriesRepo.Verify(r => r.SaveChangesAsync(), Times.Once);
         }
@@ -89,7 +83,6 @@ namespace PrismWear.Tests.Services
         [Test]
         public void GetAllAsKeyValuePairs_ShouldReturnAllCategoriesAsKeyValuePairsOrderedByName()
         {
-            // Arrange
             var data = new List<Category>
             {
                 new Category { Id = 2, Name = "Beta" },
@@ -101,13 +94,10 @@ namespace PrismWear.Tests.Services
                 .Setup(r => r.All())
                 .Returns(data);
 
-            // Act
             var result = _categoriesService.GetAllAsKeyValuePairs().ToList();
 
-            // Assert
-            // They should be ordered by Name => Alpha, Beta, Gamma
             Assert.That(result.Count, Is.EqualTo(3));
-            Assert.That(result[0].Key, Is.EqualTo("1")); // ID of "Alpha"
+            Assert.That(result[0].Key, Is.EqualTo("1")); 
             Assert.That(result[0].Value, Is.EqualTo("Alpha"));
             Assert.That(result[1].Key, Is.EqualTo("2"));
             Assert.That(result[1].Value, Is.EqualTo("Beta"));
@@ -118,7 +108,6 @@ namespace PrismWear.Tests.Services
         [Test]
         public void GetById_ShouldReturnEditCategoryInputModel_WhenCategoryExists()
         {
-            // Arrange
             var data = new List<Category>
             {
                 new Category { Id = 100, Name = "CategoryName" },
@@ -128,10 +117,8 @@ namespace PrismWear.Tests.Services
                 .Setup(r => r.AllAsNoTracking())
                 .Returns(data);
 
-            // Act
             var result = _categoriesService.GetById(100);
 
-            // Assert
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Id, Is.EqualTo(100));
             Assert.That(result.Name, Is.EqualTo("CategoryName"));
@@ -140,25 +127,21 @@ namespace PrismWear.Tests.Services
         [Test]
         public void GetById_ShouldReturnNull_WhenCategoryDoesNotExist()
         {
-            // Arrange
-            var data = new List<Category>() // no items
+            var data = new List<Category>()
                 .AsQueryable();
 
             _mockCategoriesRepo
                 .Setup(r => r.AllAsNoTracking())
                 .Returns(data);
 
-            // Act
             var result = _categoriesService.GetById(999);
 
-            // Assert
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public async Task DeleteAsync_ShouldRemoveCategoryAndSaveChanges()
         {
-            // Arrange
             var categoryToDelete = new Category
             {
                 Id = 999,
@@ -179,10 +162,8 @@ namespace PrismWear.Tests.Services
                 .Setup(r => r.SaveChangesAsync())
                 .ReturnsAsync(1);
 
-            // Act
             await _categoriesService.DeleteAsync(999);
 
-            // Assert
             _mockCategoriesRepo.Verify(r => r.Delete(It.Is<Category>(c => c.Id == 999)), Times.Once);
             _mockCategoriesRepo.Verify(r => r.SaveChangesAsync(), Times.Once);
         }

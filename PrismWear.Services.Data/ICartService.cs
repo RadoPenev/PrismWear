@@ -1,6 +1,5 @@
 ﻿using PrismWear.Data.Models;
 using PrismWear.Web.ViewModels.Cart;
-using PrismWear.Web.ViewModels.Sizes;
 namespace PrismWear.Services.Data
 {
     public interface ICartService

@@ -411,7 +411,6 @@
 @section Scripts {
     <script>
         $(document).ready(function() {
-            // Initialize the carousel if there's more than one image
         @if (productImages.Count > 1)
         {
             <text>
@@ -432,24 +431,18 @@
             </text>
         }
 
-            // Show/hide quantity control and set max quantity based on selected size
             $('.size-radio').change(function() {
                 var availableQty = parseInt($(this).data('qty')) || 0;
 
                 if (availableQty > 0) {
-                    // Show quantity control
                     $('.quantity-control').removeClass('d-none');
-
-                    // Reset quantity to 1, set max to the available qty
                     $('#quantity').val(1);
                     $('#quantity').attr('max', availableQty);
                 } else {
-                    // Hide quantity control if no stock
                     $('.quantity-control').addClass('d-none');
                 }
             });
 
-            // Decrease quantity
             $('.decrease-btn').click(function() {
                 var input = $('#quantity');
                 var value = parseInt(input.val()) || 1;
@@ -458,7 +451,6 @@
                 }
             });
 
-            // Increase quantity
             $('.increase-btn').click(function() {
                 var input = $('#quantity');
                 var value = parseInt(input.val()) || 1;
@@ -468,7 +460,6 @@
                 }
             });
 
-            // Prevent manual entry of invalid values
             $('#quantity').on('input', function() {
                 var value = parseInt($(this).val());
                 var max = parseInt($(this).attr('max')) || 10;
@@ -480,7 +471,6 @@
                 }
             });
 
-            // Add to cart functionality
             $("#addToCartBtn").click(function(e) {
                 e.preventDefault();
 
@@ -494,7 +484,6 @@
                     return;
                 }
 
-                // Show button is loading
                 button.prop('disabled', true);
                 button.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Добавяне...');
 
@@ -503,20 +492,16 @@
                     url: "/Cart/AddToCart",
                     data: { productId: productId, size: selectedSize, quantity: quantity },
                     success: function(response) {
-                        // Update cart count
                         if (response.totalItemCount !== undefined) {
                             $("#cartCount").text(response.totalItemCount);
                         }
 
-                        // Show notification
                         $('#addedQuantity').text(quantity);
                         $('#cartNotification').addClass('show');
 
-                        // Reset button
                         button.prop('disabled', false);
                         button.html('<i class="fas fa-shopping-cart cart-icon"></i> Добави в кошницата');
 
-                        // Hide notification after 3 seconds
                         setTimeout(function() {
                             $('#cartNotification').removeClass('show');
                         }, 3000);
@@ -524,7 +509,6 @@
                     error: function() {
                         alert("Моля, първо влезте в профила си!");
 
-                        // Reset button
                         button.prop('disabled', false);
                         button.html('<i class="fas fa-shopping-cart cart-icon"></i> Добави в кошницата');
                     }

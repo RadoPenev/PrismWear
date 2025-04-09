@@ -42,7 +42,7 @@ namespace PrismWear.Test.UnitTests.Models
             {
                 PageNumber = 2,
                 ProductsCount = 30,
-                ItemsPerPage = 10 // 3 pages total
+                ItemsPerPage = 10
             };
 
             Assert.That(model.HasNextPage, Is.True);

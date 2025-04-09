@@ -7,7 +7,6 @@
 }
 
 <style>
-    /* Product Form Styling */
     .page-heading {
         position: relative;
         margin-bottom: 2.5rem;
@@ -135,7 +134,6 @@
             padding-left: 1.5rem;
         }
 
-    /* Size table styling */
     .sizes-table {
         border-radius: 8px;
         overflow: hidden;
@@ -180,7 +178,6 @@
         display: inline-block;
     }
 
-    /* Responsive adjustments */
     @@media (max-width: 767.98px) {
         .form-container
 
@@ -348,7 +345,6 @@
     <partial name="_ValidationScriptsPartial" />
     <script>
         $(document).ready(function() {
-            // Animation for form sections
             $('.form-section').each(function(index) {
                 $(this).addClass('animate__animated animate__fadeIn');
                 $(this).css('animation-delay', (index * 0.1) + 's');

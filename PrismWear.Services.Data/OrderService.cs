@@ -165,7 +165,6 @@ namespace PrismWear.Services.Data
             var oldStatus = order.OrderStatus;
             order.OrderStatus = model.OrderStatus;
 
-            // ✅ Deduct stock only when moving to "Shipped"
             bool transitioningToShipped = model.OrderStatus == OrderStatus.Shipped && oldStatus != OrderStatus.Shipped;
             if (transitioningToShipped)
             {
@@ -181,18 +180,17 @@ namespace PrismWear.Services.Data
                 }
             }
 
-            // ✅ Delete order when status is "Completed"
             if (model.OrderStatus == OrderStatus.Completed)
             {
                 _orderRepository.Delete(order);
                 await _orderRepository.SaveChangesAsync();
-                return false; // Return false to indicate the order was deleted
+                return false;
             }
 
             _orderRepository.Update(order);
             await _orderRepository.SaveChangesAsync();
 
-            return true; // Return true to indicate the order was updated
+            return true;
         }
         public async Task<IEnumerable<Order>> GetAllOrdersAsync()
         {

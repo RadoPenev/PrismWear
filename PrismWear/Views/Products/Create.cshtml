@@ -8,7 +8,6 @@
 }
 
 <style>
-    /* Product Form Styling */
     .page-heading {
         position: relative;
         margin-bottom: 2.5rem;
@@ -118,7 +117,6 @@
             padding-left: 1.5rem;
         }
 
-    /* Size table styling */
     .sizes-table {
         border-radius: 8px;
         overflow: hidden;
@@ -163,7 +161,6 @@
         display: inline-block;
     }
 
-    /* File upload styling */
     .file-upload-wrapper {
         position: relative;
         margin-bottom: 1rem;
@@ -241,7 +238,6 @@
         color: var(--primary-color);
     }
 
-    /* Responsive adjustments */
     @@media (max-width: 767.98px) {
         .form-container
 
@@ -403,7 +399,6 @@
                 <span asp-validation-for="Images" class="text-danger"></span>
 
                 <div id="fileNamesPreview" class="file-names-preview">
-                    <!-- File names will be displayed here -->
                 </div>
             </div>
         </div>
@@ -421,13 +416,11 @@
     <partial name="_ValidationScriptsPartial" />
     <script>
         $(document).ready(function() {
-            // File upload preview
             $('#productImages').change(function() {
                 var fileInput = $(this);
                 var filesCount = fileInput[0].files.length;
                 var previewContainer = $('#fileNamesPreview');
 
-                // Clear previous previews
                 previewContainer.empty();
 
                 if (filesCount > 0) {
@@ -446,7 +439,6 @@
                 }
             });
 
-            // Animation for form sections
             $('.form-section').each(function(index) {
                 $(this).addClass('animate__animated animate__fadeIn');
                 $(this).css('animation-delay', (index * 0.1) + 's');

@@ -190,10 +190,8 @@
 
 <div class="container">
     <div class="filters-card p-4 animate__animated animate__fadeInUp">
-        <!-- Use a GET form to capture user-selected filters. -->
         <form asp-controller="Products" asp-action="All" method="get" class="filters-form">
             <div class="row g-4 align-items-end">
-                <!-- Category dropdown -->
                 <div class="col-md-4">
                     <label asp-for="Filters.CategoryId" class="filter-label">
                         <i class="fas fa-tags me-2"></i>Категория:
@@ -206,8 +204,6 @@
                         }
                     </select>
                 </div>
-
-                <!-- Price range fields -->
                 <div class="col-md-4">
                     <label class="filter-label">
                         <i class="fas fa-dollar-sign me-2"></i>Ценови диапазон:
@@ -261,18 +257,15 @@
         </li>
 
         @{
-            // Define max pages to show
             const int maxPagesToShow = 5;
             int startPage = Math.Max(1, Model.PageNumber - maxPagesToShow / 2);
             int endPage = Math.Min(Model.PagesCount, startPage + maxPagesToShow - 1);
 
-            // Adjust start if we're near the end
             if (endPage - startPage + 1 < maxPagesToShow && startPage > 1)
             {
                 startPage = Math.Max(1, endPage - maxPagesToShow + 1);
             }
 
-            // Show ellipsis if needed
             if (startPage > 1)
             {
                 <li class="page-item">
@@ -310,7 +303,6 @@
         }
 
         @{
-            // Show ellipsis if needed
             if (endPage < Model.PagesCount)
             {
                 if (endPage < Model.PagesCount - 1)
@@ -348,7 +340,6 @@
 
 @section Scripts {
     <script>
-        // Show loading spinner when submitting the filter form
         document.addEventListener('DOMContentLoaded', function() {
             const filterForm = document.querySelector('.filters-form');
             const loadingSpinner = document.getElementById('loading');
@@ -359,7 +350,6 @@
                 });
             }
 
-            // Add animation to product cards on load
             const productCards = document.querySelectorAll('.product-card');
             productCards.forEach((card, index) => {
                 card.classList.add('animate__animated', 'animate__fadeInUp');
