@@ -193,5 +193,11 @@ namespace PrismWear.Areas.Identity.Pages.Account
             }
             return (IUserEmailStore<IdentityUser>)_userStore;
         }
+
+        public class DummyEmailSender : IEmailSender
+        {
+            public Task SendEmailAsync(string email, string subject, string htmlMessage)
+                => Task.CompletedTask;
+        }
     }
 }

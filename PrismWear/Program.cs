@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ using PrismWear.Data.Repositories;
 using PrismWear.Services.Data;
 using System;
 using System.Threading.Tasks;
+using static PrismWear.Areas.Identity.Pages.Account.RegisterModel;
 
 namespace PrismWear
 {
@@ -54,7 +56,7 @@ namespace PrismWear
             builder.Services.AddTransient<IProductsService, ProductsService>();
             builder.Services.AddTransient<ICartService, CartService>();
             builder.Services.AddTransient<IOrderService, OrderService>();
-
+            builder.Services.AddTransient<IEmailSender, DummyEmailSender>();
             var app = builder.Build();
 
 
@@ -67,6 +69,7 @@ namespace PrismWear
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
 
 
             app.UseHttpsRedirection();
