@@ -31,7 +31,6 @@ namespace PrismWear.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Retrieve cart items:
             var cartItems = await _cartService.RetrieveUserCartAsync(userId);
 
             var model = new OrderInputViewModel
@@ -41,13 +40,13 @@ namespace PrismWear.Controllers
             };
             model.TotalAmount = cartItems.Sum(ci => ci.Product.Price * ci.Quantity);
 
-            return View(model); // ✅ Don't clear cart here!
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> ProcessPayment(OrderInputViewModel model)
         {
-            var cartItems = await _cartService.RetrieveUserCartAsync(model.UserId); // ✅ Get cart items once
+            var cartItems = await _cartService.RetrieveUserCartAsync(model.UserId);
             model.CartItems = cartItems;
             model.TotalAmount = cartItems.Sum(ci => ci.Product.Price * ci.Quantity);
 
@@ -56,8 +55,7 @@ namespace PrismWear.Controllers
                 return View(model);
             }
 
-            // ✅ Check if stock is sufficient before creating an order
-            foreach (var cartItem in cartItems) // ✅ Use retrieved cartItems instead of model.CartItems
+            foreach (var cartItem in cartItems)
             {
                 var productDetail = await _productDetailRepository
                     .All()
@@ -72,7 +70,6 @@ namespace PrismWear.Controllers
 
             var orderId = await _orderService.CreateOrderAsync(model.UserId, model);
 
-            // ✅ Clear the cart only after successful order placement
             await _cartService.ClearCartAsync(model.UserId);
 
             return RedirectToAction("Details", new { orderId });
@@ -193,7 +190,7 @@ namespace PrismWear.Controllers
         public async Task<IActionResult> AllOrders()
         {
             var orders = await _orderService.GetAllOrdersAsync();
-            return View("AllOrders", orders); // ✅ Use the new "AllOrders" view
+            return View("AllOrders", orders);
         }
     }
 }
