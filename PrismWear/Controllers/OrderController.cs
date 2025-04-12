@@ -130,22 +130,31 @@ namespace PrismWear.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditOrderViewModel model)
         {
-            if (!ModelState.IsValid)
+
+            if (User.IsInRole("User"))
             {
-                return View(model);
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                bool updatedUser = await _orderService.UpdateOrderUserAsync(model, userId);
+                if (!updatedUser)
+                {
+                    return RedirectToAction("MyOrders");
+                }
+
+                return RedirectToAction("Details", new { orderId = model.OrderId });
+
             }
-
-            bool updated = await _orderService.UpdateOrderAdminAsync(model);
-
-            if (!updated)
+            bool updatedAdmin = await _orderService.UpdateOrderAdminAsync(model);
+            if (!updatedAdmin)
             {
-                // ✅ Redirect to the admin order list if the order was deleted
                 return RedirectToAction("MyOrders");
             }
 
-            return RedirectToAction("AdminDetails", new { orderId = model.OrderId });
+            return RedirectToAction("Details", new { orderId = model.OrderId });
         }
-
 
         [HttpGet]
         public async Task<IActionResult> UserOrderDetails(int orderId)
@@ -166,6 +175,7 @@ namespace PrismWear.Controllers
         }
 
         [HttpGet]
+
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminDetails(int orderId)
         {
