@@ -5,18 +5,17 @@
 }
 
 <div class="container mt-5">
-    <h2>My Orders</h2>
+    <h2>Моите поръчки</h2>
 
     @if (!Model.Any())
     {
-        <p class="text-muted">You have no orders yet.</p>
+        <p class="text-muted">Нямате направени поръчки.</p>
     }
     else
     {
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Created On</th>
                     <th>Status</th>
                     <th>Total</th>
                     <th>Details</th>
@@ -27,7 +26,6 @@
                 @foreach (var order in Model)
                 {
                     <tr>
-                        <td>@order.CreatedOn.ToShortDateString()</td>
                         <td>@order.OrderStatus</td>
                         <td>@order.TotalAmount.ToString("C")</td>
                         <td>

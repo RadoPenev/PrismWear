@@ -71,7 +71,6 @@ namespace PrismWear
             }
 
 
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();

@@ -28,7 +28,7 @@ namespace PrismWear.Controllers
             this.environment = environment;
         }
 
-        [Authorize]
+        [Authorize(Roles ="Admin")]
         public IActionResult Create()
         {
             var viewModel = new CreateProductInputModel();
@@ -47,7 +47,7 @@ namespace PrismWear.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(CreateProductInputModel input)
         {
             ModelState.Remove(nameof(CreateProductInputModel.CategoriesItems));

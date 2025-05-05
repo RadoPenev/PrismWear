@@ -71,15 +71,15 @@
 </head>
 <body>
     <div class="create-category-container">
-        <h1>Add New Category</h1>
+        <h1>Добави нова категория</h1>
         <form asp-action="Create" asp-controller="Categories" method="post">
             <div class="form-group">
-                <label asp-for="Name"></label>
+                <label asp-for="Name">Име</label>
                 <input asp-for="Name" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="submit-btn">Create Category</button>
+            <button type="submit" class="submit-btn">Създай категорията</button>
         </form>
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -296,19 +296,19 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Products" asp-action="All">
-                                <i class="fas fa-store me-1"></i>All Products
+                                <i class="fas fa-store me-1"></i>Всички продукти
                             </a>
                         </li>
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Categories" asp-action="All">
-                                    <i class="fas fa-tags me-1"></i>All Categories
+                                    <i class="fas fa-tags me-1"></i>Всички категории
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Products" asp-action="Create">
-                                    <i class="fas fa-plus-circle me-1"></i>Create Product
+                                    <i class="fas fa-plus-circle me-1"></i>Създай продукт
                                 </a>
                             </li>
                         }

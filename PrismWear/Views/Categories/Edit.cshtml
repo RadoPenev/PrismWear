@@ -81,18 +81,18 @@
 </head>
 <body>
     <div class="edit-category-container">
-        <h1>Edit Category</h1>
+        <h1>Редактирай категория</h1>
         <form asp-action="Edit" asp-controller="Categories" asp-route-id="@Model.Id" method="post">
             <input type="hidden" asp-for="Id" />
 
             <div class="form-group">
-                <label asp-for="Name"></label>
+                <label asp-for="Name">Име</label>
                 <input asp-for="Name" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="submit-btn">Save Changes</button>
-            <a asp-action="All" asp-controller="Categories" class="cancel-link">Cancel</a>
+            <button type="submit" class="submit-btn">Запази</button>
+            <a asp-action="All" asp-controller="Categories" class="cancel-link">Отказ</a>
         </form>
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

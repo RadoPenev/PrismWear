@@ -5,41 +5,39 @@
 }
 
 <div class="container mt-5">
-    <h2>All Orders</h2>
+    <h2>Всички поръчки</h2>
 
     @if (!Model.Any())
     {
-        <p class="text-muted">No orders have been placed yet.</p>
+        <p class="text-muted">Няма направени поръчки.</p>
     }
     else
     {
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Created On</th>
-                    <th>Customer</th>
-                    <th>Status</th>
-                    <th>Total</th>
-                    <th>Details</th>
-                    <th>Edit</th>
+                    <th>Купувач</th>
+                    <th>Статус</th>
+                    <th>Общо</th>
+                    <th>Детайли</th>
+                    <th>Редактирай</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var order in Model)
                 {
                     <tr>
-                        <td>@order.CreatedOn.ToShortDateString()</td>
                         <td>@order.FirstName @order.LastName</td>
                         <td>@order.OrderStatus</td>
                         <td>@order.TotalAmount.ToString("C")</td>
                         <td>
                             <a asp-action="AdminDetails" asp-route-orderId="@order.Id" class="btn btn-sm btn-primary">
-                                View
+                                Виж
                             </a>
                         </td>
                         <td>
                             <a asp-controller="Order" asp-action="Edit" asp-route-orderId="@order.Id" class="btn btn-sm btn-warning">
-                                Edit
+                                Редактирай
                             </a>
                         </td>
                     </tr>

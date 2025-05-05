@@ -80,7 +80,7 @@ namespace PrismWear.Data
                 NormalizedEmail = "ADMIN@MYAPP.COM",
                 EmailConfirmed = true,
                 SecurityStamp = "ab6414c3-2391-42f5-bd5c-2a64267dc709",
-                PasswordHash = "AQAAAAIAAYagAAAAEBheA/UaJzgCE+mtgDRxqzUD0/Wk07hacMTEcg3eAC7kl0UtLlHxfyvTnI/vZkSiNQ==",
+                PasswordHash = "AQAAAAIAAYagAAAAEABCIluy9fna2cvExqms6EDlCo6eNKD7J4iKkbrc0qZlIx99HDc7COUGXR+m3zyC6w==",
     ConcurrencyStamp = "d61ae36a-b528-4d0f-b1c1-b5546a7098f9",
             };
 
